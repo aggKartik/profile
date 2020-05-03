@@ -7,8 +7,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - search-mongodb
-  search-mongodb:
+      - profile-mongodb
+  profile-mongodb:
     image: mongo:3.6
     container_name: "profile-mongodb"
     ports:
