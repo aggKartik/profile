@@ -1,0 +1,12 @@
+# Server config
+server:
+  port: ${PORT:8080}
+
+# Spring config
+spring:
+  application:
+    name: profile-service
+  logging:
+    level:
+      org.springframework: INFO
+      org.hibernate: INFO
