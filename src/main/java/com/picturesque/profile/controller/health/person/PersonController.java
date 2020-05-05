@@ -1,14 +1,17 @@
 package com.picturesque.profile.controller.health.person;
 
-import javax.validation.Valid;
-
 import com.picturesque.profile.payloads.GenericResponse.Response;
 import com.picturesque.profile.payloads.POSTRequests.PersonRequest;
 import com.picturesque.profile.payloads.PersonAddResponse;
 import com.picturesque.profile.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/v1")

@@ -1,11 +1,12 @@
 package com.picturesque.profile.repos;
 
-import com.picturesque.profile.databaseModels.Person;
-import org.springframework.data.mongodb.repository.MongoRepository;
+        import com.picturesque.profile.databaseModels.Person;
+        import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface PersonRepository extends MongoRepository<Person, String> {
 
     public Person findById(int id);
-    public Person findByName(String name);
-
+    public Person findByUserName(String userName);
+    public Person findByUserId(String userId);
+    public Person findByToken(String token);
 }

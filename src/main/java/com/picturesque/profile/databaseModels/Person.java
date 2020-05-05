@@ -1,6 +1,7 @@
 package com.picturesque.profile.databaseModels;
 import org.springframework.data.annotation.Id;
 
+
 /*
 Person
 
@@ -14,22 +15,33 @@ Password (encrypted?)
 
 public class Person {
 
-    @Id
-    public int id;
+    public @Id int id;
     public String name;
     public String userName;
     private String userId;
     public String token; // probably need a seperate token class?
     public String pass; // probably need a Password token class?
+    public int points;
+    public String pic;
 
-    public Person(int id, String name, String userName, String userId, String token, String pass) {
+    public Person(int id, String name, String userName, String userId, String token, String pass, String pic, int points) {
         this.id = id;
         this.name = name;
         this.userName = userName;
         this.userId = userId;
         this.token = token;
         this.pass = pass;
+        this.pic = pic;
+        this.points = points;
     }
+
+    public int getPoints() { return points; }
+
+    public void setPoints(int points) { this.points = points; }
+
+    public String getPic() { return pic; }
+
+    public void setPic(String pic) { this.pic = pic; }
 
     public String getName() {
         return name;
@@ -71,13 +83,13 @@ public class Person {
         this.pass = pass;
     }
 
+    // doesn't include token in toString
     @Override
     public String toString() {
         return "Person{" +
                 "name='" + name + '\'' +
                 ", userName='" + userName + '\'' +
                 ", userId='" + userId + '\'' +
-                ", token='" + token + '\'' +
                 ", pass='" + pass + '\'' +
                 '}';
     }
