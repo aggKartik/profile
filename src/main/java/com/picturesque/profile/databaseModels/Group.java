@@ -1,32 +1,28 @@
 package com.picturesque.profile.databaseModels;
 import org.springframework.data.annotation.Id;
 
-/*
-Person
+import java.util.Arrays;
+import java.util.List;
 
-Name
-User_name (specified by user)
-User_id - generated
-Token - login info
-Password (encrypted?)
+/*
+Group
+
+name (specified by users)
+members (members in the group)
+bio (the group bio)
+pic (group profile pic)
 
  */
 
-//@Entity
 public class Group {
-
-
 
     public @Id int id;
     public String name;
-    public com.picturesque.profile.databaseModels.Person[] members;
+    public List<Person> members;
     public String bio;
-
-//    @Lob
-//    @Basic(fetch = FetchType.LAZY)
     public byte[] pic;
 
-    public Group(int id, String name, com.picturesque.profile.databaseModels.Person[] members, String bio) {
+    public Group(int id, String name, List<Person> members, String bio) {
         this.id = id;
         this.name = name;
         this.members = members;
@@ -49,11 +45,11 @@ public class Group {
         this.name = name;
     }
 
-    public com.picturesque.profile.databaseModels.Person[] getMembers() {
+    public List<Person> getMembers() {
         return members;
     }
 
-    public void setMembers(com.picturesque.profile.databaseModels.Person[] members) {
+    public void setMembers(List<Person> members) {
         this.members = members;
     }
 
@@ -65,14 +61,13 @@ public class Group {
         this.pic = pic;
     }
 
-    @java.lang.Override
-    public java.lang.String toString() {
+    @Override
+    public String toString() {
         return "Group{" +
                 "name='" + name + '\'' +
-                ", members=" + java.util.Arrays.toString(members) +
-                ", pic=" + java.util.Arrays.toString(pic) +
+                ", members=" + members +
+                ", bio='" + bio + '\'' +
+                ", pic=" + Arrays.toString(pic) +
                 '}';
     }
-
-
 }

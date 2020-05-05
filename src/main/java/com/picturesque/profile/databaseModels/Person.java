@@ -1,12 +1,6 @@
 package com.picturesque.profile.databaseModels;
 import org.springframework.data.annotation.Id;
 
-//import javax.persistence.Basic;
-//import javax.persistence.Entity;
-//import javax.persistence.FetchType;
-//import javax.persistence.Lob;
-//
-
 
 /*
 Person
@@ -19,10 +13,7 @@ Password (encrypted?)
 
  */
 
-//@Entity
 public class Person {
-
-
 
     public @Id int id;
     public String name;
@@ -31,10 +22,6 @@ public class Person {
     public String token; // probably need a seperate token class?
     public String pass; // probably need a Password token class?
     public int points;
-
-
-//    @Lob
-//    @Basic(fetch = FetchType.LAZY)
     public byte[] pic;
 
     public Person(int id, String name, String userName, String userId, String token, String pass, byte[] pic, int points) {
@@ -47,7 +34,6 @@ public class Person {
         this.pic = pic;
         this.points = points;
     }
-
 
     public int getPoints() { return points; }
 

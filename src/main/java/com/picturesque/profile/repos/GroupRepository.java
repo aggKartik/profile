@@ -7,5 +7,4 @@ public interface GroupRepository extends MongoRepository<Group, String> {
 
     public Group findById(int id);
     public Group findByName(String name);
-
 }

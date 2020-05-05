@@ -1,20 +1,13 @@
 package com.picturesque.profile.databaseModels;
-
-//import javax.persistence.Entity;
-//import javax.persistence.Id;
-
 import org.springframework.data.annotation.Id;
-
 import java.util.Date;
 
+// Group MetaData
 
-//@Entity
 public class GroupMD {
-
 
     public @Id
     int id;
-
     public String groupID;
     public Date createDate;
 
@@ -40,7 +33,7 @@ public class GroupMD {
         this.createDate = createDate;
     }
 
-    @java.lang.Override
+    @Override
     public java.lang.String toString() {
         return "GroupMD{" +
                 "groupID='" + groupID + '\'' +

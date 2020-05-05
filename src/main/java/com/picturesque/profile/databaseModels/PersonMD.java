@@ -1,13 +1,12 @@
 package com.picturesque.profile.databaseModels;
+
 import org.springframework.data.annotation.Id;
-//import javax.persistence.Entity;
+
 import java.util.Date;
+import java.util.List;
 
+// Person MetaData
 
-
-
-
-//@Entity
 public class PersonMD {
 
 
@@ -17,12 +16,11 @@ public class PersonMD {
     public Date dob;
     public Date dateJoined;
     public Date lastLogin;
-    // how do I want to implement location??
     // https://stackoverflow.com/questions/8677707/data-type-for-storing-ip-addresses
     public long lastIP;
-    public int[] groupIds;
+    public List<Integer> groupIds;
 
-    public PersonMD(int id, String userId, Date dob, Date dateJoined, Date lastLogin, long lastIP, int[] groupIds) {
+    public PersonMD(int id, String userId, Date dob, Date dateJoined, Date lastLogin, long lastIP, List<Integer> groupIds) {
         this.id = id;
         this.userId = userId;
         this.dob = dob;
@@ -72,23 +70,24 @@ public class PersonMD {
         this.lastIP = lastIP;
     }
 
-    public int[] getGroupIds() {
+    public List<Integer> getGroupIds() {
         return groupIds;
     }
 
-    public void setGroupIds(int[] groupIds) {
+    public void setGroupIds(List<Integer> groupIds) {
         this.groupIds = groupIds;
     }
 
-    @java.lang.Override
-    public java.lang.String toString() {
+
+    @Override
+    public String toString() {
         return "PersonMD{" +
                 "userId='" + userId + '\'' +
                 ", dob=" + dob +
                 ", dateJoined=" + dateJoined +
                 ", lastLogin=" + lastLogin +
                 ", lastIP=" + lastIP +
-                ", groupIds=" + java.util.Arrays.toString(groupIds) +
+                ", groupIds=" + groupIds +
                 '}';
     }
 }
