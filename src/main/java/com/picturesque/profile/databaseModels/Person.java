@@ -22,9 +22,9 @@ public class Person {
     public String token; // probably need a seperate token class?
     public String pass; // probably need a Password token class?
     public int points;
-    public byte[] pic;
+    public String pic;
 
-    public Person(int id, String name, String userName, String userId, String token, String pass, byte[] pic, int points) {
+    public Person(int id, String name, String userName, String userId, String token, String pass, String pic, int points) {
         this.id = id;
         this.name = name;
         this.userName = userName;
@@ -39,9 +39,9 @@ public class Person {
 
     public void setPoints(int points) { this.points = points; }
 
-    public byte[] getPic() { return pic; }
+    public String getPic() { return pic; }
 
-    public void setPic(byte[] pic) { this.pic = pic; }
+    public void setPic(String pic) { this.pic = pic; }
 
     public String getName() {
         return name;
