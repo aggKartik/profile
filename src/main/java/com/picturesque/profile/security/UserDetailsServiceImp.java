@@ -1,5 +1,6 @@
 package com.picturesque.profile.security;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,4 +26,5 @@ public class UserDetailsServiceImp implements UserDetailsService {
         UserDetails user = User.withUsername(person.getUserName()).password(person.getPass()).authorities("USER").build();
         return user;
     }
+
 }
