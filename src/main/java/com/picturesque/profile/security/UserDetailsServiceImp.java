@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.picturesque.profile.databaseModels.Person;
 
+//Used for authorization
 public class UserDetailsServiceImp implements UserDetailsService {
 
     @Autowired
