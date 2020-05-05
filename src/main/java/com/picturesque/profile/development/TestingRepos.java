@@ -9,11 +9,14 @@ import com.picturesque.profile.repos.GroupRepository;
 import com.picturesque.profile.repos.PersonMDRepository;
 import com.picturesque.profile.repos.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 
+@Service
 public class TestingRepos {
+
+
 
 
     @Autowired
