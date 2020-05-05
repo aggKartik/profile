@@ -21,8 +21,12 @@ public class PersonService {
     }
 
     public ResponseEntity<Response<PersonAddResponse>> addPerson(PersonRequest req) {
+        // need to create the bytes for an empty profile picture... is this the correct buffer?
+        byte[] bytes = new byte[128];
 
-        Person newPerson = new Person(1, req.getName(), req.getUserName(), "123", req.getToken(), req.getPass());
+
+        Person newPerson = new Person(1, req.getName(), req.getUserName(), "123", req.getToken(), req.getPass(), bytes, 0);
+
         personRepo.save(newPerson); // interacting with mongo here
 
         Response resp = new Response<PersonAddResponse>(new PersonAddResponse("user kartik.agg successfully added"), 200);
