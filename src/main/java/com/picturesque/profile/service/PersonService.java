@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 
 @Service
 public class PersonService {
@@ -22,16 +20,11 @@ public class PersonService {
         this.personRepo = personRepo;
     }
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
-    private Person instantiatePerson(PersonRequest req) {
-        return new Person(1, req.getName(), req.getUserName(), "123", req.getToken(), passwordEncoder.encode(req.getPass()), "", 0);
-    }
-
     public ResponseEntity<Response<PersonAddResponse>> addPerson(PersonRequest req) {
 
-        Person newPerson = instantiatePerson(req);
+
+
+        Person newPerson = new Person(1, req.getName(), req.getUserName(), "123", req.getToken(), req.getPass(), "", 0);
 
         personRepo.save(newPerson); // interacting with mongo here
 
@@ -39,5 +32,6 @@ public class PersonService {
         HttpStatus status = HttpStatus.OK;
 
         return new ResponseEntity<Response<PersonAddResponse>>(resp, status);
+
     }
 }
