@@ -1,13 +1,13 @@
-#Profile Microservice for Picturesque Platform
+# Profile Microservice for Picturesque Platform
 
 The profile micro-service handles the back-end architecture to make a profile sytem possible. 
 
 ## Run on Your Local System
 
-###Requirements:
+### Requirements:
 - Docker
 
-###Steps
+### Steps
 1. Git clone master branch
 2. Build application and required containers with following command:
     ````
