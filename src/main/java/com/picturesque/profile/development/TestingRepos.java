@@ -33,12 +33,12 @@ public class TestingRepos {
 
 
     public void testRepositories() {
-        Group exampleGroup = new Group(1, "Rohil", new ArrayList<Person>(), "This is a bio");
+        Group exampleGroup = new Group(1, "Rohil", new ArrayList<String>(), "This is a bio");
         groupRepository.save(exampleGroup);
         System.out.println(groupRepository.findById(1));
 
         Person examplePerson = new Person(1, "Kartik", "rhjaveri", "abc", "123",
-                "password", new byte[1], 100);
+                "password", "", 100);
         personRepository.save(examplePerson);
         System.out.println(personRepository.findById(1));
 
