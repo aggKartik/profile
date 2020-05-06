@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 @Service
@@ -22,11 +22,12 @@ public class PersonService {
         this.personRepo = personRepo;
     }
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    };
 
     private Person instantiatePerson(PersonRequest req) {
-        return new Person(1, req.getName(), req.getUserName(), "123", req.getToken(), passwordEncoder.encode(req.getPass()), "", 0);
+        return new Person(1, req.getName(), req.getUserName(), "123", req.getToken(), passwordEncoder().encode(req.getPass()), "", 0);
     }
 
     public ResponseEntity<Response<PersonAddResponse>> addPerson(PersonRequest req) {
