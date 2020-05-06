@@ -1,5 +1,6 @@
 package com.picturesque.profile.databaseModels;
-import org.springframework.data.annotation.Id;
+import com.picturesque.profile.helperModels.GroupID;
+import com.picturesque.profile.helperModels.UserID;
 
 import java.util.List;
 
@@ -15,17 +16,27 @@ pic (group profile pic)
 
 public class Group {
 
-    public @Id int id;
+
+    public GroupID groupID;
     public String name;
-    public List<String> members; // representing the user IDs of the users
+    public List<UserID> members; // representing the user IDs of the users
     public String bio;
     public String pic;
 
-    public Group(int id, String name, List<String> members, String bio) {
-        this.id = id;
+    public Group(GroupID groupID, String name, List<UserID> members, String bio) {
+
+        this.groupID = groupID;
         this.name = name;
         this.members = members;
         this.bio = bio;
+    }
+
+    public GroupID getGroupID() {
+        return groupID;
+    }
+
+    public void setGroupID(GroupID groupID) {
+        this.groupID = groupID;
     }
 
     public String getBio() {
@@ -44,11 +55,11 @@ public class Group {
         this.name = name;
     }
 
-    public List<String> getMembers() {
+    public List<UserID> getMembers() {
         return members;
     }
 
-    public void setMembers(List<String> members) {
+    public void setMembers(List<UserID> members) {
         this.members = members;
     }
 
@@ -69,4 +80,5 @@ public class Group {
                 ", pic='" + pic + '\'' +
                 '}';
     }
+
 }

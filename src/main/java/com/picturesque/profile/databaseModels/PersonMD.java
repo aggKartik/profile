@@ -1,5 +1,6 @@
 package com.picturesque.profile.databaseModels;
 
+import com.picturesque.profile.helperModels.UserID;
 import org.springframework.data.annotation.Id;
 
 import java.util.Date;
@@ -12,7 +13,7 @@ public class PersonMD {
 
     public @Id
     int id;
-    public String userId;
+    public UserID userId;
     public Date dob;
     public Date dateJoined;
     public Date lastLogin;
@@ -20,7 +21,7 @@ public class PersonMD {
     public long lastIP;
     public List<Integer> groupIds;
 
-    public PersonMD(int id, String userId, Date dob, Date dateJoined, Date lastLogin, long lastIP, List<Integer> groupIds) {
+    public PersonMD(int id, UserID userId, Date dob, Date dateJoined, Date lastLogin, long lastIP, List<Integer> groupIds) {
         this.id = id;
         this.userId = userId;
         this.dob = dob;
@@ -30,11 +31,11 @@ public class PersonMD {
         this.groupIds = groupIds;
     }
 
-    public String getUserId() {
+    public UserID getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(UserID userId) {
         this.userId = userId;
     }
 
