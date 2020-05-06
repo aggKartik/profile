@@ -1,4 +1,4 @@
-package com.picturesque.profile.controller.health.person;
+package com.picturesque.profile.controller.person;
 
 import com.picturesque.profile.payloads.GenericResponse.Response;
 import com.picturesque.profile.payloads.POSTRequests.PersonRequest;
@@ -24,7 +24,7 @@ public class PersonController {
         this.personService = personService;
     }
 
-    @PostMapping(path = "/profile")
+    @PostMapping(path = "/person")
     public ResponseEntity<Response<PersonAddResponse>> addUserToSystem(@Valid @RequestBody PersonRequest req) {
         return personService.addPerson(req);
     }

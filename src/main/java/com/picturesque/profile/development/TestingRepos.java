@@ -38,10 +38,11 @@ public class TestingRepos {
         groupRepository.save(exampleGroup);
         System.out.println(groupRepository.findById(1));
 
-        Person examplePerson = new Person(1, "Kartik", "rhjaveri", "abc", "123",
-                "password", "", 100);
+        Person examplePerson = new Person("Kartik", "rhjaveri", "abc", "123",
+                "password", "", 100, Person.PROFILE_PRIVACY.PUBLIC,
+                new ArrayList<>(), new ArrayList<>());
         personRepository.save(examplePerson);
-        System.out.println(personRepository.findById(1));
+        System.out.println(personRepository.findByUserName("rhjaveri"));
 
         GroupMD exampleGroupMD = new GroupMD(1, "groupMD", new Date());
         groupMDRepository.save(exampleGroupMD);
