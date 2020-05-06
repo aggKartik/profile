@@ -1,96 +1,155 @@
 package com.picturesque.profile.databaseModels;
+
 import org.springframework.data.annotation.Id;
 
+import java.util.List;
 
-/*
-Person
 
-Name
-User_name (specified by user)
-User_id - generated
-Token - login info
-Password (encrypted?)
-
+/**
+ * Person
+ *
+ * Name
+ * User_name (specified by user)
+ * User_id -generated
+ * Token - login info Password (encrypted?)
+ * Points
+ * Picture URL
+ * Private/Public - ENUM
+ * Follower Invite List (MAX 1000)
+ * Group Invite List (MAX 1000)
+ *
  */
 
 public class Person {
 
-    public @Id int id;
-    public String name;
-    public String userName;
-    private String userId;
-    public String token; // probably need a seperate token class?
-    public String pass; // probably need a Password token class?
-    public int points;
-    public String pic;
+  public enum PROFILE_PRIVACY {
+    PRIVATE, PUBLIC
+  }
 
-    public Person(int id, String name, String userName, String userId, String token, String pass, String pic, int points) {
-        this.id = id;
-        this.name = name;
-        this.userName = userName;
-        this.userId = userId;
-        this.token = token;
-        this.pass = pass;
-        this.pic = pic;
-        this.points = points;
-    }
+//  public @Id
+//  int id;
+  public String name;
+  public String userName;
+  private String userId;
+  public String token; // probably need a seperate token class?
+  public String pass; // probably need a Password token class?
+  public int points;
+  public String pic;
+  public PROFILE_PRIVACY profileType;
+  public List<String> followerInvite;
+  public List<String> groupInvite;
 
-    public int getPoints() { return points; }
+  //int id,
+  public Person(String name, String userName, String userId, String token, String pass,
+                String pic, int points, PROFILE_PRIVACY profileType, List<String> followerInvite,
+                List<String> groupInvite) {
+    //this.id = id;
+    this.name = name;
+    this.userName = userName;
+    this.userId = userId;
+    this.token = token;
+    this.pass = pass;
+    this.pic = pic;
+    this.points = points;
+    this.profileType = profileType;
+    this.followerInvite = followerInvite;
+    this.groupInvite = groupInvite;
+  }
 
-    public void setPoints(int points) { this.points = points; }
+  public int getPoints() {
+    return points;
+  }
 
-    public String getPic() { return pic; }
+  public void setPoints(int points) {
+    this.points = points;
+  }
 
-    public void setPic(String pic) { this.pic = pic; }
+  public String getPic() {
+    return pic;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setPic(String pic) {
+    this.pic = pic;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public PROFILE_PRIVACY getProfileType() {
+    return profileType;
+  }
 
-    public String getUserName() {
-        return userName;
-    }
+  public void setProfileType(PROFILE_PRIVACY profileType) {
+    this.profileType = profileType;
+  }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+  public List<String> getFollowerInvite() {
+    return followerInvite;
+  }
 
-    public String getUserId() {
-        return userId;
-    }
+  public void setFollowerInvite(List<String> followerInvite) {
+    this.followerInvite = followerInvite;
+  }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+  public List<String> getGroupInvite() {
+    return groupInvite;
+  }
 
-    public String getToken() {
-        return token;
-    }
+  public void setGroupInvite(List<String> groupInvite) {
+    this.groupInvite = groupInvite;
+  }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getPass() {
-        return pass;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setPass(String pass) {
-        this.pass = pass;
-    }
+  public String getUserName() {
+    return userName;
+  }
 
-    // doesn't include token in toString
-    @Override
-    public String toString() {
-        return "Person{" +
-                "name='" + name + '\'' +
-                ", userName='" + userName + '\'' +
-                ", userId='" + userId + '\'' +
-                ", pass='" + pass + '\'' +
-                '}';
-    }
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
+
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
+
+  public String getToken() {
+    return token;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
+  }
+
+  public String getPass() {
+    return pass;
+  }
+
+  public void setPass(String pass) {
+    this.pass = pass;
+  }
+
+  @Override
+  public String toString() {
+    return "Person{" +
+         //   "id=" + id +
+            ", name='" + name + '\'' +
+            ", userName='" + userName + '\'' +
+            ", userId='" + userId + '\'' +
+            ", token='" + token + '\'' +
+            ", pass='" + pass + '\'' +
+            ", points=" + points +
+            ", pic='" + pic + '\'' +
+            ", profileType=" + profileType +
+            ", followerInvite=" + followerInvite +
+            ", groupInvite=" + groupInvite +
+            '}';
+  }
 }
