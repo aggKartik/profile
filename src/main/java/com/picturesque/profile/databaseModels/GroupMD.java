@@ -1,4 +1,5 @@
 package com.picturesque.profile.databaseModels;
+import com.picturesque.profile.helperModels.GroupID;
 import org.springframework.data.annotation.Id;
 import java.util.Date;
 
@@ -8,20 +9,20 @@ public class GroupMD {
 
     public @Id
     int id;
-    public String groupID;
+    public GroupID groupID;
     public Date createDate;
 
-    public GroupMD(int id, String groupID, Date createDate) {
+    public GroupMD(int id, GroupID groupID, Date createDate) {
         this.id = id;
         this.groupID = groupID;
         this.createDate = createDate;
     }
 
-    public String getGroupID() {
+    public GroupID getGroupID() {
         return groupID;
     }
 
-    public void setGroupID(String groupID) {
+    public void setGroupID(GroupID groupID) {
         this.groupID = groupID;
     }
 

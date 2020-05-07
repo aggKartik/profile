@@ -1,4 +1,6 @@
 package com.picturesque.profile.databaseModels;
+
+import com.picturesque.profile.helperModels.UserID;
 import org.springframework.data.annotation.Id;
 
 
@@ -18,17 +20,17 @@ public class Person {
     public @Id int id;
     public String name;
     public String userName;
-    private String userId;
+    private UserID userID;
     public String token; // probably need a seperate token class?
     public String pass; // probably need a Password token class?
     public int points;
     public String pic;
 
-    public Person(int id, String name, String userName, String userId, String token, String pass, String pic, int points) {
+    public Person(int id, String name, String userName,  UserID userID, String token, String pass, String pic, int points) {
         this.id = id;
         this.name = name;
         this.userName = userName;
-        this.userId = userId;
+        this.userID = userID;
         this.token = token;
         this.pass = pass;
         this.pic = pic;
@@ -59,12 +61,12 @@ public class Person {
         this.userName = userName;
     }
 
-    public String getUserId() {
-        return userId;
+    public UserID getUserId() {
+        return userID;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserId(UserID userId) {
+        this.userID = userId;
     }
 
     public String getToken() {
@@ -89,7 +91,7 @@ public class Person {
         return "Person{" +
                 "name='" + name + '\'' +
                 ", userName='" + userName + '\'' +
-                ", userId='" + userId + '\'' +
+                ", userId='" + userID + '\'' +
                 ", pass='" + pass + '\'' +
                 '}';
     }
