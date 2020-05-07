@@ -7,13 +7,10 @@ import java.util.Date;
 
 public class GroupMD {
 
-    public @Id
-    int id;
     public GroupID groupID;
     public Date createDate;
 
-    public GroupMD(int id, GroupID groupID, Date createDate) {
-        this.id = id;
+    public GroupMD(GroupID groupID, Date createDate) {
         this.groupID = groupID;
         this.createDate = createDate;
     }

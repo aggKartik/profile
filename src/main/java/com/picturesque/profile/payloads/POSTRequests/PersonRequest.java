@@ -9,7 +9,8 @@ public class PersonRequest {
     public String name;
     @NotNull @NotEmpty
     public String userName;
-    public String token; // probably need a seperate token class?
+    public String token; //probably need a seperate token class?
+    @NotNull @NotEmpty
     public String pass;
 
     public PersonRequest(String name, String userName, String token, String pass) {
