@@ -3,6 +3,7 @@ package com.picturesque.profile.service;
 import com.picturesque.profile.Utilities.Rules;
 import com.picturesque.profile.databaseModels.Person;
 import com.picturesque.profile.exceptions.CustomApiError;
+import com.picturesque.profile.helperModels.UserID;
 import com.picturesque.profile.payloads.GenericResponse.Response;
 import com.picturesque.profile.payloads.PersonAddResponse;
 import com.picturesque.profile.repos.PersonRepository;
@@ -64,10 +65,10 @@ public class PersonService {
     String userId = Integer.toString(Objects.hash(req.getName(), req.getUserName(), nowVal));
     Person newPerson = new Person(req.getName(),
             req.getUserName(),
-            userId,
+            new UserID(userId),
             req.getToken(),
             req.getPass(),
-            "", 0,
+            0, "",
             Person.PROFILE_PRIVACY.PUBLIC,
             new ArrayList<>(),
             new ArrayList<>());
