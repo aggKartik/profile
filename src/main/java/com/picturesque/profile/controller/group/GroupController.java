@@ -1,7 +1,8 @@
 package com.picturesque.profile.controller.group;
 
 import com.picturesque.profile.payloads.GenericResponse.Response;
-import com.picturesque.profile.payloads.PersonAddResponse;
+import com.picturesque.profile.payloads.GroupAddResponse;
+import com.picturesque.profile.payloads.POSTRequests.GroupRequest;
 import com.picturesque.profile.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class GroupController {
     }
 
     @PostMapping(path = "/group")
-    public ResponseEntity<Response<PersonAddResponse>> addUserToSystem(@Valid @RequestBody GroupService req) {
+    public ResponseEntity<Response<GroupAddResponse>> addUserToSystem(@Valid @RequestBody GroupRequest req) {
         return groupService.addGroup(req);
     }
 

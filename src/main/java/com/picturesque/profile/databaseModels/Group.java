@@ -6,12 +6,10 @@ import java.util.List;
 
 /*
 Group
-
 name (specified by users)
 members (members in the group)
 bio (the group bio)
 pic (group profile pic)
-
  */
 
 public class Group {
