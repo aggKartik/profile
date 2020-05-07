@@ -3,6 +3,7 @@ package com.picturesque.profile.service;
 import com.picturesque.profile.databaseModels.Group;
 import com.picturesque.profile.databaseModels.GroupMD;
 import com.picturesque.profile.databaseModels.Person;
+import com.picturesque.profile.helperModels.UserID;
 import com.picturesque.profile.payloads.GenericResponse.Response;
 import com.picturesque.profile.payloads.GroupAddResponse;
 import com.picturesque.profile.payloads.POSTRequests.GroupRequest;
@@ -10,12 +11,14 @@ import com.picturesque.profile.payloads.PersonAddResponse;
 import com.picturesque.profile.repos.GroupMDRepository;
 import com.picturesque.profile.repos.GroupRepository;
 import com.picturesque.profile.repos.PersonRepository;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
@@ -67,7 +70,7 @@ public class GroupService {
         // try saving the Group and Group Metadata
         try {
             String groupID = Integer.toString(Objects.hash(owner, name, nowVal));
-            ArrayList<UserID> members = new ArrayList<UserID>(owner.getUserId());
+            ArrayList<UserID> members = new ArrayList<UserID>(new UserID(owner.getUserId()));
             Group group = new Group(groupID, name, members, "", "");
             groupRepository.save(group);
             groupMDRepository.save(new GroupMD(groupID, now));
