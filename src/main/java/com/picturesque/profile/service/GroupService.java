@@ -70,7 +70,8 @@ public class GroupService {
         // try saving the Group and Group Metadata
         try {
             String groupID = Integer.toString(Objects.hash(owner, name, nowVal));
-            ArrayList<UserID> members = new ArrayList<UserID>(new UserID(owner.getUserId()));
+            ArrayList<UserID> members = new ArrayList<UserID>();
+            members.add(owner.getUserId());
             Group group = new Group(groupID, name, members, "", "");
             groupRepository.save(group);
             groupMDRepository.save(new GroupMD(groupID, now));
