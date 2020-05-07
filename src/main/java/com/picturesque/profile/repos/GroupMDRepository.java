@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface GroupMDRepository extends MongoRepository<GroupMD, String> {
 
-    public GroupMD findById(int id);
     public GroupMD findByGroupID(GroupID groupID);
 
 }

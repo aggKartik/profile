@@ -8,6 +8,6 @@ public interface PersonRepository extends MongoRepository<Person, String> {
 
     //public Person findById(int id);
     public Person findByUserName(String userName);
-    public Person findByUserId(UserID userId);
+    public Person findByUserID(UserID userId);
     public Person findByToken(String token);
 }
