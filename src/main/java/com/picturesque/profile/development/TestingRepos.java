@@ -4,6 +4,7 @@ import com.picturesque.profile.databaseModels.Group;
 import com.picturesque.profile.databaseModels.GroupMD;
 import com.picturesque.profile.databaseModels.Person;
 import com.picturesque.profile.databaseModels.PersonMD;
+import com.picturesque.profile.helperModels.UserID;
 import com.picturesque.profile.repos.GroupMDRepository;
 import com.picturesque.profile.repos.GroupRepository;
 import com.picturesque.profile.repos.PersonMDRepository;
@@ -33,7 +34,7 @@ public class TestingRepos {
 
 
     public void testRepositories() {
-        Group exampleGroup = new Group(1, "Rohil", new ArrayList<String>(), "This is a bio");
+        Group exampleGroup = new Group(new UserID("1"), "Rohil", new ArrayList<String>(), "This is a bio");
         groupRepository.save(exampleGroup);
         System.out.println(groupRepository.findById(1));
 
