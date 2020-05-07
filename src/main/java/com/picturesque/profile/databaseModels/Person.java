@@ -3,20 +3,16 @@ package com.picturesque.profile.databaseModels;
 import com.picturesque.profile.helperModels.GroupID;
 import com.picturesque.profile.helperModels.UserID;
 
-import org.springframework.data.annotation.Id;
-
 import java.util.List;
 
 
 /*
 Person
-
 Name
 User_name (specified by user)
 User_id - generated
 Token - login info
 Password (encrypted?)
-
  */
 
 public class Person {
