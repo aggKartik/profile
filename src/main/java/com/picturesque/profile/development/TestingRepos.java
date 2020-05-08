@@ -50,7 +50,7 @@ public class TestingRepos {
         System.out.println(groupMDRepository.findByGroupID(new GroupID("1")));
 
         PersonMD examplePersonMD = new PersonMD(new UserID("1"),new Date(),
-                new Date(), new Date(), 100, new ArrayList<>());
+                new Date(), new Date(), "100", new ArrayList<>());
         personMDRepository.save(examplePersonMD);
         System.out.println(personMDRepository.findByUserId(new UserID("1")));
 
