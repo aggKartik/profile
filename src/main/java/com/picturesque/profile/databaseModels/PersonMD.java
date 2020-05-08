@@ -16,10 +16,10 @@ public class PersonMD {
     public Date dateJoined;
     public Date lastLogin;
     // https://stackoverflow.com/questions/8677707/data-type-for-storing-ip-addresses
-    public long lastIP;
+    public String lastIP;
     public List<GroupID> groupIds;
 
-    public PersonMD(UserID userId, Date dob, Date dateJoined, Date lastLogin, long lastIP, List<GroupID> groupIds) {
+    public PersonMD(UserID userId, Date dob, Date dateJoined, Date lastLogin, String lastIP, List<GroupID> groupIds) {
         this.userId = userId;
         this.dob = dob;
         this.dateJoined = dateJoined;
@@ -60,11 +60,11 @@ public class PersonMD {
         this.lastLogin = lastLogin;
     }
 
-    public long getLastIP() {
+    public String getLastIP() {
         return lastIP;
     }
 
-    public void setLastIP(long lastIP) {
+    public void setLastIP(String lastIP) {
         this.lastIP = lastIP;
     }
 
