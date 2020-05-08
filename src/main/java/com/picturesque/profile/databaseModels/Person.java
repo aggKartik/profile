@@ -2,7 +2,6 @@ package com.picturesque.profile.databaseModels;
 
 import com.picturesque.profile.helperModels.GroupID;
 import com.picturesque.profile.helperModels.UserID;
-
 import org.springframework.data.annotation.Id;
 
 import java.util.List;
@@ -27,6 +26,7 @@ public class Person {
 
   public String name;
   public String userName;
+  @Id
   private UserID userID;
   public String token; // probably need a seperate token class?
   public String pass; // probably need a Password token class?
@@ -121,6 +121,10 @@ public class Person {
 
   public void setFollowerInvite(List<UserID> followerInvite) {
     this.followerInvite = followerInvite;
+  }
+
+  public void addFollowerInvite(UserID requester) {
+    this.followerInvite.add(requester);
   }
 
   public List<GroupID> getGroupInvite() {
