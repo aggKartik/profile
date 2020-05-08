@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface FollowRepository extends MongoRepository<Follow, String> {
 
-public List<Follow> findByFollower(UserID follower);
-
+public List<Follow> findByUserID(UserID follower);
 public List<Follow> findByFollowing(UserID following);
+
 
 }
