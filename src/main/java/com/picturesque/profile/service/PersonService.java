@@ -6,6 +6,7 @@ import com.picturesque.profile.databaseModels.PersonMD;
 import com.picturesque.profile.exceptions.CustomApiError;
 import com.picturesque.profile.helperModels.UserID;
 import com.picturesque.profile.payloads.GenericResponse.Response;
+import com.picturesque.profile.payloads.PUTRequests.PersonPutRequest;
 import com.picturesque.profile.payloads.PersonAddResponse;
 import com.picturesque.profile.repos.PersonMDRepository;
 import com.picturesque.profile.repos.PersonRepository;
@@ -40,9 +41,7 @@ public class PersonService {
 
   public ResponseEntity<Response<PersonAddResponse>> addPerson(PersonRequest req) {
 
-    // Validate inputs from user first
-
-    // 1. Check to see if user name already exists in DB
+    // 1. Validate inputs from user first
     String message = "";
     HttpStatus status = HttpStatus.BAD_REQUEST;
     if (personRepo.findByUserName(req.userName) != null) {
@@ -60,7 +59,7 @@ public class PersonService {
     if (Years.yearsBetween(dt, today).getYears() < 13) {
       message = "Too Young to Join Platform";
     }
-
+    // 2. If inputs are invalid, return a 400
     if (!message.equals("")) {
       Response<PersonAddResponse> resp = new Response<>(new PersonAddResponse(message),
               400);
@@ -76,18 +75,25 @@ public class PersonService {
 
      */
 
+    // 3. Start setting up entry into database
     Date now = new Date();
     long nowVal = now.getTime();
     Person newPerson = getPerson(req, nowVal);
-    PersonMD newPersonMD = createPersonMD(req, newPerson, nowVal);
+    PersonMD newPersonMD = createPersonMD(req, newPerson);
 
     personRepo.save(newPerson); // interacting with mongo here
     personMDRepo.save(newPersonMD);
 
+    // 4. Process a successful return message
     message = "User " + req.getUserName() + " added successfully!";
     Response resp = new Response<>(new PersonAddResponse(message), 200);
     status = HttpStatus.OK;
+
     return new ResponseEntity<Response<PersonAddResponse>>(resp, status);
+  }
+
+  public ResponseEntity<Response<PersonAddResponse>> changePerson(PersonPutRequest req) {
+    return null;
   }
 
   private Person getPerson(PersonRequest req, long nowVal) {
@@ -103,7 +109,7 @@ public class PersonService {
             new ArrayList<>());
   }
 
-  private PersonMD createPersonMD(PersonRequest req, Person person, long nowVal) {
+  private PersonMD createPersonMD(PersonRequest req, Person person) {
     DateTime today = new LocalDateTime().toDateTime();
     return new PersonMD(person.getUserID(), req.getDob(),
             today.toDate(), today.toDate(), req.getClientIp(), new ArrayList<>());
