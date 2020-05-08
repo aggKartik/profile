@@ -119,6 +119,7 @@ public class PersonService {
         messages.add("DOB specified is not valid!");
       } else {
         modifiedPersonMD.setDob(dob);
+        personMDRepo.save(modifiedPersonMD);
         messages.add("DOB modified successfully");
       }
     }
@@ -128,6 +129,7 @@ public class PersonService {
         messages.add("Bio Length is too long!");
       } else {
         modifiedPersonMD.setBio(bio);
+        personMDRepo.save(modifiedPersonMD);
         messages.add("Bio added successfully!");
       }
     }
