@@ -2,11 +2,13 @@ package com.picturesque.profile.controller.person;
 
 import com.picturesque.profile.payloads.GenericResponse.Response;
 import com.picturesque.profile.payloads.POSTRequests.PersonRequest;
+import com.picturesque.profile.payloads.PUTRequests.PersonPutRequest;
 import com.picturesque.profile.payloads.PersonAddResponse;
 import com.picturesque.profile.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +29,11 @@ public class PersonController {
     @PostMapping(path = "/person")
     public ResponseEntity<Response<PersonAddResponse>> addUserToSystem(@Valid @RequestBody PersonRequest req) {
         return personService.addPerson(req);
+    }
+
+    @PutMapping(path = "/person")
+    public ResponseEntity<Response<PersonAddResponse>> modifyUserInSystem(@Valid @RequestBody PersonPutRequest req) {
+        return personService.changePerson(req);
     }
 
 //    @GetMapping(path = "/profile")
