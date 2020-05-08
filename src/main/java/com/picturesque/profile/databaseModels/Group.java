@@ -1,6 +1,8 @@
 package com.picturesque.profile.databaseModels;
+
 import com.picturesque.profile.helperModels.GroupID;
 import com.picturesque.profile.helperModels.UserID;
+import org.springframework.data.annotation.Id;
 
 import java.util.List;
 
@@ -15,6 +17,7 @@ pic (group profile pic)
 public class Group {
 
 
+    @Id
     public GroupID groupID;
     public String name;
     public List<UserID> members; // representing the user IDs of the users

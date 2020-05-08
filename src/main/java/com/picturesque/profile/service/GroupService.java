@@ -51,11 +51,7 @@ public class GroupService {
         }
         // TODO: check if they're in less than the max number of groups
 
-        // name is already taken
-        else if (groupRepository.findByName(req.getName()) != null) {
-            message = "This name is already taken";
-            isBadRequest = true;
-        }
+
 
         // error on bad request
         if (isBadRequest) {
