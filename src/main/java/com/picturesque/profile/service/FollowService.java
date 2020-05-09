@@ -33,13 +33,26 @@ public class FollowService {
         boolean badRequest = false;
 
         // can't follow yourself
-        if (req.requester == req.requested) {
+        if (req.requester.equals(req.requested)) {
             message = "Can't follow yourself";
             badRequest = true;
         }
 
-        Person requested = personRepository.findByUserName(req.requested);
-        Person requester = personRepository.findByUserName(req.requester);
+
+        Person requested = personRepository.findByUserName(req.getRequested());
+        Person requester = personRepository.findByUserName(req.getRequester());
+
+        // check the database if requester  exists
+        if(requested == null) {
+            message = "User you trying to follow doesn't exist";
+            badRequest = true;
+        }
+
+        // if you don't exist
+        if (requester == null) {
+            message = "You don't exist";
+            badRequest = true;
+        }
 
         // check if they're already in the other person's invite list????? IS this needed?
 
@@ -85,7 +98,8 @@ public class FollowService {
         // else catch any other errors can't find
         else {
             Response<FollowAddResponse> resp = new Response<>(new FollowAddResponse("Some kind of error not handled"),
-                    500);
+                    400);
+            status = HttpStatus.BAD_REQUEST;
             return new ResponseEntity<>(resp, status);
         }
     }
