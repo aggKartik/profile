@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -43,6 +44,7 @@ public class GroupService {
         boolean isBadRequest = false;
 
         Person owner = personRepository.findByUserName(req.getUser());
+        System.out.println(owner);
 
         // check that the person with the user name exists
         if (owner == null) {
@@ -64,10 +66,10 @@ public class GroupService {
         String name = req.getName();
 
         // try saving the Group and Group Metadata
-        try {
             GroupID groupID = new GroupID(Integer.toString(Objects.hash(owner, name, nowVal)));
-            ArrayList<UserID> members = new ArrayList<UserID>();
+            List<UserID> members = new ArrayList<>();
             members.add(owner.getUserID());
+        try {
             Group group = new Group(groupID , name, members, "");
             groupRepository.save(group);
             groupMDRepository.save(new GroupMD(groupID, now));

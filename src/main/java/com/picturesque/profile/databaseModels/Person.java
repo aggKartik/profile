@@ -2,6 +2,7 @@ package com.picturesque.profile.databaseModels;
 
 import com.picturesque.profile.helperModels.GroupID;
 import com.picturesque.profile.helperModels.UserID;
+import org.springframework.data.annotation.Id;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class Person {
 
   public String name;
   public String userName;
+  @Id
   private UserID userID;
   public String token; // probably need a seperate token class?
   public String pass; // probably need a Password token class?
