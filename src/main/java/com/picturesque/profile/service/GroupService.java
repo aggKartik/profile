@@ -12,6 +12,7 @@ import com.picturesque.profile.payloads.PersonAddResponse;
 import com.picturesque.profile.repos.GroupMDRepository;
 import com.picturesque.profile.repos.GroupRepository;
 import com.picturesque.profile.repos.PersonRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -25,69 +26,63 @@ import java.util.Objects;
 
 @Service
 public class GroupService {
-    private GroupRepository groupRepository;
-    private PersonRepository personRepository;
-    private GroupMDRepository groupMDRepository;
+  private GroupRepository groupRepository;
+  private PersonRepository personRepository;
+  private GroupMDRepository groupMDRepository;
 
-    @Autowired
-    public GroupService(GroupRepository groupRepo, PersonRepository personRepo, GroupMDRepository groupMDRepo)
-    { this.groupRepository = groupRepo;
+  @Autowired
+  public GroupService(GroupRepository groupRepo, PersonRepository personRepo, GroupMDRepository groupMDRepo) {
+    this.groupRepository = groupRepo;
     this.personRepository = personRepo;
     this.groupMDRepository = groupMDRepo;
+  }
+
+  public ResponseEntity<Response<GroupAddResponse>> addGroup(GroupRequest req) {
+
+    // validate input from the user first
+    HttpStatus status = HttpStatus.BAD_REQUEST;
+    String message = "";
+    boolean isBadRequest = false;
+
+    Person owner = personRepository.findByUserName(req.getUser());
+
+    // check that the person with the user name exists
+    if (owner == null) {
+      message = "This user does not exist";
+      isBadRequest = true;
+    }
+    // TODO: check if they're in less than the max number of groups
+
+    // error on bad request
+    if (isBadRequest) {
+      Response<GroupAddResponse> resp = new Response<>(new GroupAddResponse(message),
+              400);
+      return new ResponseEntity<>(resp, status);
+    }
+    Date now = new Date();
+    long nowVal = now.getTime();
+    String name = req.getName();
+
+    // try saving the Group and Group Metadata
+    GroupID groupID = new GroupID(Integer.toString(Objects.hash(owner, name, nowVal)));
+    List<UserID> members = new ArrayList<>();
+    members.add(owner.getUserID());
+    Group group = new Group(groupID, name, members, "");
+
+    try {
+      groupRepository.save(group);
+      groupMDRepository.save(new GroupMD(groupID, now));
+    } catch (DataAccessException e) {
+      Response<GroupAddResponse> resp = new Response<>(new GroupAddResponse(e.getMessage()),
+              400);
+      return new ResponseEntity<>(resp, status);
     }
 
-    public ResponseEntity<Response<GroupAddResponse>> addGroup(GroupRequest req) {
+    message = "Group " + name + " added successfully!";
+    Response resp = new Response<>(new PersonAddResponse(message), 200);
+    status = HttpStatus.OK;
 
-        // validate input from the user first
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        String message = "";
-        boolean isBadRequest = false;
+    return new ResponseEntity<Response<GroupAddResponse>>(resp, status);
 
-        Person owner = personRepository.findByUserName(req.getUser());
-        System.out.println(owner);
-
-        // check that the person with the user name exists
-        if (owner == null) {
-            message = "This user does not exist";
-            isBadRequest = true;
-        }
-        // TODO: check if they're in less than the max number of groups
-
-
-
-        // error on bad request
-        if (isBadRequest) {
-            Response<GroupAddResponse> resp = new Response<>(new GroupAddResponse(message),
-                    400);
-            return new ResponseEntity<>(resp, status);
-        }
-        Date now = new Date();
-        long nowVal = now.getTime();
-        String name = req.getName();
-
-        // try saving the Group and Group Metadata
-            GroupID groupID = new GroupID(Integer.toString(Objects.hash(owner, name, nowVal)));
-            List<UserID> members = new ArrayList<>();
-            members.add(owner.getUserID());
-        try {
-            Group group = new Group(groupID , name, members, "");
-            groupRepository.save(group);
-            groupMDRepository.save(new GroupMD(groupID, now));
-
-            message = "Group " + name + " added successfully!";
-            Response resp = new Response<>(new PersonAddResponse(message), 200);
-            status = HttpStatus.OK;
-            return new ResponseEntity<Response<GroupAddResponse>>(resp, status);
-        }
-        catch(DataAccessException e) {
-            Response<GroupAddResponse> resp = new Response<>(new GroupAddResponse(e.getMessage()),
-                    400);
-            return new ResponseEntity<>(resp, status);
-        }
-
-
-
-    }
-
-
+  }
 }
