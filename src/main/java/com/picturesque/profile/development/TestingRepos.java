@@ -1,5 +1,6 @@
 package com.picturesque.profile.development;
 
+import com.picturesque.profile.databaseModels.Person;
 import com.picturesque.profile.databaseModels.Follow;
 import com.picturesque.profile.databaseModels.Person;
 import com.picturesque.profile.helperModels.UserID;
@@ -27,7 +28,6 @@ public class TestingRepos {
 
     @Autowired
     public FollowRepository followRepository;
-
 
     public void testRepositories() {
 
@@ -69,8 +69,6 @@ public class TestingRepos {
         personRepository.save(examplePerson2);
 
     }
-
-
 
 
 

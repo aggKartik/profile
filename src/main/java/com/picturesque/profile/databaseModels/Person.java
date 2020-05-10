@@ -9,13 +9,11 @@ import java.util.List;
 
 /*
 Person
-
 Name
 User_name (specified by user)
 User_id - generated
 Token - login info
 Password (encrypted?)
-
  */
 
 public class Person {
@@ -121,10 +119,6 @@ public class Person {
 
   public void setFollowerInvite(List<UserID> followerInvite) {
     this.followerInvite = followerInvite;
-  }
-
-  public void addFollowerInvite(UserID requester) {
-    this.followerInvite.add(requester);
   }
 
   public List<GroupID> getGroupInvite() {
