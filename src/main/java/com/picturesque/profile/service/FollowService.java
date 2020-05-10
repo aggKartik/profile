@@ -69,6 +69,14 @@ public class FollowService {
 
         // if they're private add to their invite list
         if (requested.getProfileType() == Person.PROFILE_PRIVACY.PRIVATE) {
+            Person dup = personRepository.findByUserID(requester.getUserID());
+            // person is already in the invite list
+            if(dup.getFollowerInvite().contains(requested.getUserID())) {
+              message = "You already requested to follow this person";
+              Response<FollowAddResponse> resp = new Response<>(new FollowAddResponse(message),
+                      400);
+              return new ResponseEntity<>(resp, status);
+            }
             requested.addFollowerInvite(requester.getUserID());
             personRepository.save(requested);
         }
