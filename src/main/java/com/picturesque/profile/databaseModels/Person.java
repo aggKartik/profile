@@ -4,6 +4,7 @@ import com.picturesque.profile.helperModels.GroupID;
 import com.picturesque.profile.helperModels.UserID;
 import org.springframework.data.annotation.Id;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -107,6 +108,13 @@ public class Person {
 
   public PROFILE_PRIVACY getProfileType() {
     return profileType;
+  }
+
+  public void addFollowerInvite(UserID userID) {
+    if(getFollowerInvite() == null) {
+      setFollowerInvite(new ArrayList<>());
+    }
+    followerInvite.add(userID);
   }
 
   public void setProfileType(PROFILE_PRIVACY profileType) {
