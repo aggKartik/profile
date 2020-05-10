@@ -17,7 +17,6 @@ public class HealthChecker {
     @RequestMapping("/health")
     @ResponseStatus(HttpStatus.OK)
     public Healthy healthCheck() {
-        testingRepos.testBasicFollow();
         return new Healthy(1, "profile system is up");
     }
 

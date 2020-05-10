@@ -34,7 +34,8 @@ public class PersonController {
 
     @PutMapping(path = "/person")
     public ResponseEntity<Response<PersonAddResponse>> modifyUserInSystem(@Valid @RequestBody PersonPutRequest req) {
-        return personService.changePerson(req);
+        Response<PersonAddResponse> resp = personService.changePerson(req);
+        return new ResponseEntity<>(resp, resp.getStatusCode());
     }
 
 //    @GetMapping(path = "/profile")

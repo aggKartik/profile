@@ -78,27 +78,16 @@ public class PersonService {
   }
 
 
-  public ResponseEntity<Response<PersonAddResponse>> changePerson(PersonPutRequest req) {
+  public Response<PersonAddResponse> changePerson(PersonPutRequest req) {
 
     // 1. Verify user inputs
-
-    // TODO add some kind of validation here such that only the actual user can modify
-    // their own details
-
-    String message = "";
-    HttpStatus status = HttpStatus.BAD_REQUEST;
+    // TODO add some kind of validation here such that only the actual user can modify their own details
 
     Person modifiedPerson = personRepo.findByUserName(req.getUserName());
     if (modifiedPerson == null) {
-      message = "Person does not exist in the database";
+      throw new PersonIllegalArgument("Person does not exist in the database");
     }
     PersonMD modifiedPersonMD = personMDRepo.findByUserId(modifiedPerson.getUserID());
-
-    if (!message.equals("")) {
-      Response<PersonAddResponse> resp = new Response<>(new PersonAddResponse(message),
-              HttpStatus.BAD_REQUEST);
-      return new ResponseEntity<>(resp, status);
-    }
 
     // 2. Modify what can be modified
     List<String> messages = new ArrayList<>();
@@ -127,10 +116,8 @@ public class PersonService {
       messages.add("Nothing was modified!");
     }
 
-    Response<PersonAddResponse> resp = new Response<>(new PersonAddResponse(messages.toString()),
+    return new Response<>(new PersonAddResponse(messages.toString()),
             HttpStatus.OK);
-    status = HttpStatus.OK;
-    return new ResponseEntity<>(resp, status);
   }
 
   private Person getPerson(PersonRequest req, long nowVal) {

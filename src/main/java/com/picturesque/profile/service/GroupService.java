@@ -3,6 +3,7 @@ package com.picturesque.profile.service;
 import com.picturesque.profile.databaseModels.Group;
 import com.picturesque.profile.databaseModels.GroupMD;
 import com.picturesque.profile.databaseModels.Person;
+import com.picturesque.profile.exceptions.GroupIllegalArgument;
 import com.picturesque.profile.helperModels.GroupID;
 import com.picturesque.profile.helperModels.UserID;
 import com.picturesque.profile.payloads.GenericResponse.Response;
@@ -37,28 +38,16 @@ public class GroupService {
     this.groupMDRepository = groupMDRepo;
   }
 
-  public ResponseEntity<Response<GroupAddResponse>> addGroup(GroupRequest req) {
-
-    // validate input from the user first
-    HttpStatus status = HttpStatus.BAD_REQUEST;
-    String message = "";
-    boolean isBadRequest = false;
+  public Response<GroupAddResponse> addGroup(GroupRequest req) {
 
     Person owner = personRepository.findByUserName(req.getUser());
 
     // check that the person with the user name exists
     if (owner == null) {
-      message = "This user does not exist";
-      isBadRequest = true;
+      throw new GroupIllegalArgument("This user does not exist");
     }
     // TODO: check if they're in less than the max number of groups
 
-    // error on bad request
-    if (isBadRequest) {
-      Response<GroupAddResponse> resp = new Response<>(new GroupAddResponse(message),
-              HttpStatus.BAD_REQUEST);
-      return new ResponseEntity<>(resp, status);
-    }
     Date now = new Date();
     long nowVal = now.getTime();
     String name = req.getName();
@@ -75,14 +64,10 @@ public class GroupService {
     } catch (DataAccessException e) {
       Response<GroupAddResponse> resp = new Response<>(new GroupAddResponse(e.getMessage()),
               HttpStatus.BAD_REQUEST);
-      return new ResponseEntity<>(resp, status);
+      return resp;
     }
 
-    message = "Group " + name + " added successfully!";
-    Response resp = new Response<>(new PersonAddResponse(message), HttpStatus.OK);
-    status = HttpStatus.OK;
-
-    return new ResponseEntity<Response<GroupAddResponse>>(resp, status);
-
+    String message = "Group " + name + " added successfully!";
+    return new Response<GroupAddResponse>(new GroupAddResponse(message), HttpStatus.OK);
   }
 }
