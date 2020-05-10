@@ -63,7 +63,7 @@ public class FollowService {
 
         if (badRequest) {
             Response<FollowAddResponse> resp = new Response<>(new FollowAddResponse(message),
-                    400);
+                    HttpStatus.BAD_REQUEST);
             return new ResponseEntity<>(resp, status);
         }
 
@@ -74,7 +74,7 @@ public class FollowService {
             if(dup.getFollowerInvite().contains(requested.getUserID())) {
               message = "You already requested to follow this person";
               Response<FollowAddResponse> resp = new Response<>(new FollowAddResponse(message),
-                      400);
+                      HttpStatus.BAD_REQUEST);
               return new ResponseEntity<>(resp, status);
             }
             requested.addFollowerInvite(requester.getUserID());
@@ -89,20 +89,20 @@ public class FollowService {
             } catch (DataAccessException e) {
                 status = HttpStatus.INTERNAL_SERVER_ERROR;
                 Response<FollowAddResponse> resp = new Response<>(new FollowAddResponse(e.getMessage()),
-                        500);
+                        HttpStatus.INTERNAL_SERVER_ERROR);
                 return new ResponseEntity<>(resp, status);
             }
         }
         // else catch any other errors can't find
         else {
             Response<FollowAddResponse> resp = new Response<>(new FollowAddResponse("Some kind of error not handled"),
-                    400);
+                    HttpStatus.BAD_REQUEST);
             status = HttpStatus.BAD_REQUEST;
             return new ResponseEntity<>(resp, status);
         }
 
         message = "You followed " + requested.getName() + " successfully!";
-        Response resp = new Response<>(new PersonAddResponse(message), 200);
+        Response resp = new Response<>(new PersonAddResponse(message), HttpStatus.OK);
         status = HttpStatus.OK;
         return new ResponseEntity<Response<FollowAddResponse>>(resp, status);
     }

@@ -3,6 +3,7 @@ package com.picturesque.profile.service;
 import com.picturesque.profile.Utilities.Rules;
 import com.picturesque.profile.databaseModels.Person;
 import com.picturesque.profile.databaseModels.PersonMD;
+import com.picturesque.profile.exceptions.PersonIllegalArgument;
 import com.picturesque.profile.helperModels.UserID;
 import com.picturesque.profile.payloads.GenericResponse.Response;
 import com.picturesque.profile.payloads.PUTRequests.PersonPutRequest;
@@ -36,37 +37,29 @@ public class PersonService {
     this.personMDRepo = personMDRepo;
   }
 
-  public ResponseEntity<Response<PersonAddResponse>> addPerson(PersonRequest req) {
+  public Response<PersonAddResponse> addPerson(PersonRequest req) {
 
     // 1. Validate inputs from user first
     String message = "";
     HttpStatus status = HttpStatus.BAD_REQUEST;
     if (personRepo.findByUserName(req.userName) != null) {
-      message = "User with this name already exists!";
+      throw new PersonIllegalArgument("User with this name already exists!");
     }
     if (!userNameValid(req.getUserName())) {
-      message = "Illegal username specified!";
+      throw new PersonIllegalArgument("Illegal username specified!");
     }
     if (!nameValid(req.getName())) {
-      message = "Invalid name specified";
+      throw new PersonIllegalArgument("Invalid name specified");
     }
     if (!isOldEnough(req.getDob())) {
-      message = "Too Young to Join Platform";
-    }
-    // 2. If inputs are invalid, return a 400
-    if (!message.equals("")) {
-      Response<PersonAddResponse> resp = new Response<>(new PersonAddResponse(message),
-              400);
-      return new ResponseEntity<>(resp, status);
+      throw new PersonIllegalArgument("Too Young to Join Platform");
     }
 
     /*
     TODO:
      add verification for passwords
      will depend on encryption/token scheme
-
      Get client IP address, could also change once authentication is implemented
-
      */
 
     // 3. Start setting up entry into database
@@ -80,10 +73,8 @@ public class PersonService {
 
     // 4. Process a successful return message
     message = "User " + req.getUserName() + " added successfully!";
-    Response<PersonAddResponse> resp = new Response<>(new PersonAddResponse(message), 200);
-    status = HttpStatus.OK;
-
-    return new ResponseEntity<>(resp, status);
+    Response<PersonAddResponse> resp = new Response<>(new PersonAddResponse(message), HttpStatus.OK);
+    return resp;
   }
 
 
@@ -105,7 +96,7 @@ public class PersonService {
 
     if (!message.equals("")) {
       Response<PersonAddResponse> resp = new Response<>(new PersonAddResponse(message),
-              400);
+              HttpStatus.BAD_REQUEST);
       return new ResponseEntity<>(resp, status);
     }
 
@@ -137,7 +128,7 @@ public class PersonService {
     }
 
     Response<PersonAddResponse> resp = new Response<>(new PersonAddResponse(messages.toString()),
-            200);
+            HttpStatus.OK);
     status = HttpStatus.OK;
     return new ResponseEntity<>(resp, status);
   }
