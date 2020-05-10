@@ -1,12 +1,14 @@
 package com.picturesque.profile.databaseModels;
 import com.picturesque.profile.helperModels.GroupID;
 import org.springframework.data.annotation.Id;
+
 import java.util.Date;
 
 // Group MetaData
 
 public class GroupMD {
 
+    @Id
     public GroupID groupID;
     public Date createDate;
 
