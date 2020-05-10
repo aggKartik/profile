@@ -1,11 +1,13 @@
 package com.picturesque.profile.payloads.GenericResponse;
 
+import org.springframework.http.HttpStatus;
+
 public class Response<T> {
 
     private T response;
-    private int statusCode;
+    private HttpStatus statusCode;
 
-    public Response(T response, int statusCode) {
+    public Response(T response, HttpStatus statusCode) {
         this.response = response;
         this.statusCode = statusCode;
     }
@@ -18,11 +20,11 @@ public class Response<T> {
         this.response = response;
     }
 
-    public int getStatusCode() {
+    public HttpStatus getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(int statusCode) {
+    public void setStatusCode(HttpStatus statusCode) {
         this.statusCode = statusCode;
     }
 }

@@ -56,7 +56,7 @@ public class GroupService {
     // error on bad request
     if (isBadRequest) {
       Response<GroupAddResponse> resp = new Response<>(new GroupAddResponse(message),
-              400);
+              HttpStatus.BAD_REQUEST);
       return new ResponseEntity<>(resp, status);
     }
     Date now = new Date();
@@ -74,12 +74,12 @@ public class GroupService {
       groupMDRepository.save(new GroupMD(groupID, now));
     } catch (DataAccessException e) {
       Response<GroupAddResponse> resp = new Response<>(new GroupAddResponse(e.getMessage()),
-              400);
+              HttpStatus.BAD_REQUEST);
       return new ResponseEntity<>(resp, status);
     }
 
     message = "Group " + name + " added successfully!";
-    Response resp = new Response<>(new PersonAddResponse(message), 200);
+    Response resp = new Response<>(new PersonAddResponse(message), HttpStatus.OK);
     status = HttpStatus.OK;
 
     return new ResponseEntity<Response<GroupAddResponse>>(resp, status);

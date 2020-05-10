@@ -28,7 +28,8 @@ public class PersonController {
 
     @PostMapping(path = "/person")
     public ResponseEntity<Response<PersonAddResponse>> addUserToSystem(@Valid @RequestBody PersonRequest req) {
-        return personService.addPerson(req);
+        Response<PersonAddResponse> resp = personService.addPerson(req);
+        return new ResponseEntity<>(resp, resp.getStatusCode());
     }
 
     @PutMapping(path = "/person")
