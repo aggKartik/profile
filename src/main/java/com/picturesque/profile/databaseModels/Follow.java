@@ -6,7 +6,9 @@ import java.util.Date;
 
 
 public class Follow {
+    // following is the person who is making the request
     public UserID following;
+    // userID is the person who is being followed
     public UserID userID;
     public Date dateFollowed;
 
