@@ -27,7 +27,7 @@ public class FollowService {
         this.personRepository = personRepository;
     }
 
-    public ResponseEntity<Response<FollowAddResponse>> addFollow(FollowRequest req) {
+    public Response<FollowAddResponse> addFollow(FollowRequest req) {
         String message = "";
         HttpStatus status = HttpStatus.BAD_REQUEST;
         boolean badRequest = false;
@@ -79,8 +79,6 @@ public class FollowService {
         }
 
         message = "You followed " + requested.getName() + " successfully!";
-        Response resp = new Response<>(new PersonAddResponse(message), HttpStatus.OK);
-        status = HttpStatus.OK;
-        return new ResponseEntity<Response<FollowAddResponse>>(resp, status);
+        return new Response<>(new FollowAddResponse(message), HttpStatus.OK);
     }
 }

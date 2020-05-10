@@ -27,7 +27,8 @@ public class FollowController {
 
     @PostMapping(path = "/follow")
     public ResponseEntity<Response<FollowAddResponse>> addFollow(@Valid @RequestBody FollowRequest req) {
-        return followService.addFollow(req);
+        Response<FollowAddResponse> resp = followService.addFollow(req);
+        return new ResponseEntity<>(resp, resp.getStatusCode());
     }
 
 }
