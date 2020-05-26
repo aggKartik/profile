@@ -115,6 +115,9 @@ public class PersonService {
       messages.add("Nothing was modified!");
     }
 
+    personRepo.save(modifiedPerson);
+    personMDRepo.save(modifiedPersonMD);
+
     return new Response<>(new PersonAddResponse(messages.toString()),
             HttpStatus.OK);
   }
