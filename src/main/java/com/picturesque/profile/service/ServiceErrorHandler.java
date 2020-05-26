@@ -23,7 +23,7 @@ public class ServiceErrorHandler {
     }
 
     @ExceptionHandler({GroupIllegalArgument.class})
-    public ResponseEntity<Response<GroupAddResponse>> handleGroupInvalidArguments(PersonIllegalArgument e) {
+    public ResponseEntity<Response<GroupAddResponse>> handleGroupInvalidArguments(GroupIllegalArgument e) {
         Response<GroupAddResponse> resp = new Response<GroupAddResponse>(new GroupAddResponse(e.getMessage()),
                 HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(resp, HttpStatus.BAD_REQUEST);
