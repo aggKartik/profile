@@ -92,7 +92,7 @@ public class FollowService {
 
         // check the database if requester  exists
         if(requested == null) {
-            throw new FollowIllegalArgument("User you trying to follow doesn't exist");
+            throw new FollowIllegalArgument("User you trying to unfollow doesn't exist");
         }
 
         // if you don't exist
@@ -115,15 +115,10 @@ public class FollowService {
         }
 
         // they're not on the invite list just get rid of the request just get rid of the follower reationiship
-        else if (follow != null)  {
-            followRepository.delete(follow);
-            message = "You unfollowed " + requested.getName() + " successfully!";
-            return new Response<>(new FollowAddResponse(message), HttpStatus.OK);
-        }
+        followRepository.delete(follow);
+        message = "You unfollowed " + requested.getName() + " successfully!";
+        return new Response<>(new FollowAddResponse(message), HttpStatus.OK);
 
-        else {
-            throw new FollowIllegalArgument("some odd unhandled case");
-        }
 
     }
 }
