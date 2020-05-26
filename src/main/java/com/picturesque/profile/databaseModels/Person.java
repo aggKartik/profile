@@ -117,6 +117,13 @@ public class Person {
     followerInvite.add(userID);
   }
 
+  public void removeFollowerInvite(UserID userID) {
+    if(getFollowerInvite() == null) {
+      setFollowerInvite(new ArrayList<>());
+    }
+    followerInvite.remove(userID);
+  }
+
   public void setProfileType(PROFILE_PRIVACY profileType) {
     this.profileType = profileType;
   }

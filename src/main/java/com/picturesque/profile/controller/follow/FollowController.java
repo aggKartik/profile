@@ -7,10 +7,7 @@ import com.picturesque.profile.payloads.POSTRequests.FollowRequest;
 import com.picturesque.profile.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -30,5 +27,12 @@ public class FollowController {
         Response<FollowAddResponse> resp = followService.addFollow(req);
         return new ResponseEntity<>(resp, resp.getStatusCode());
     }
+
+    @PostMapping(path = "/unfollow")
+    public ResponseEntity<Response<FollowAddResponse>> deleteFollow(@Valid @RequestBody FollowRequest req) {
+        Response<FollowAddResponse> resp = followService.removeFollow(req);
+        return new ResponseEntity<>(resp, resp.getStatusCode());
+    }
+
 
 }
