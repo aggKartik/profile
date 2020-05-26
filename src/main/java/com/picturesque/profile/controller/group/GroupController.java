@@ -2,6 +2,7 @@ package com.picturesque.profile.controller.group;
 
 import com.picturesque.profile.payloads.GenericResponse.Response;
 import com.picturesque.profile.payloads.GroupAddResponse;
+import com.picturesque.profile.payloads.POSTRequests.GroupInviteRequest;
 import com.picturesque.profile.payloads.POSTRequests.GroupRequest;
 import com.picturesque.profile.payloads.PersonAddResponse;
 import com.picturesque.profile.service.GroupService;
@@ -30,4 +31,9 @@ public class GroupController {
         return new ResponseEntity<>(resp, resp.getStatusCode());
     }
 
+    @PostMapping(path = "/group_invite")
+    public ResponseEntity<Response<GroupAddResponse>> addGroupInvitation(@Valid @RequestBody GroupInviteRequest req) {
+      Response<GroupAddResponse> resp = groupService.addGroupInvitation(req);
+      return new ResponseEntity<>(resp, resp.getStatusCode());
+    }
 }

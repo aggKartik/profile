@@ -8,6 +8,7 @@ import com.picturesque.profile.helperModels.GroupID;
 import com.picturesque.profile.helperModels.UserID;
 import com.picturesque.profile.payloads.GenericResponse.Response;
 import com.picturesque.profile.payloads.GroupAddResponse;
+import com.picturesque.profile.payloads.POSTRequests.GroupInviteRequest;
 import com.picturesque.profile.payloads.POSTRequests.GroupRequest;
 import com.picturesque.profile.payloads.PersonAddResponse;
 import com.picturesque.profile.repos.GroupMDRepository;
@@ -69,5 +70,10 @@ public class GroupService {
 
     String message = "Group " + name + " added successfully!";
     return new Response<GroupAddResponse>(new GroupAddResponse(message), HttpStatus.OK);
+  }
+
+  public Response<GroupAddResponse> addGroupInvitation(GroupInviteRequest req) {
+    // TODO
+    return null;
   }
 }
