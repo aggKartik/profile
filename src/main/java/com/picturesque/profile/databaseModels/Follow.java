@@ -2,10 +2,16 @@ package com.picturesque.profile.databaseModels;
 
 import com.picturesque.profile.helperModels.UserID;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+
 import java.util.Date;
 
 
 public class Follow {
+
+    @Id
+    public ObjectId id;
     // following is the person who is making the request
     public UserID following;
     // userID is the person who is being followed
