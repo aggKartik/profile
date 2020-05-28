@@ -3,12 +3,15 @@ package com.picturesque.profile.service;
 import com.picturesque.profile.databaseModels.Group;
 import com.picturesque.profile.databaseModels.GroupMD;
 import com.picturesque.profile.databaseModels.Person;
+import com.picturesque.profile.databaseModels.PersonMD;
 import com.picturesque.profile.exceptions.GroupIllegalArgument;
+import com.picturesque.profile.exceptions.PersonIllegalArgument;
 import com.picturesque.profile.helperModels.GroupID;
 import com.picturesque.profile.helperModels.UserID;
 import com.picturesque.profile.payloads.GenericResponse.Response;
 import com.picturesque.profile.payloads.GroupAddResponse;
 import com.picturesque.profile.payloads.POSTRequests.GroupRequest;
+import com.picturesque.profile.payloads.PUTRequests.GroupPutRequest;
 import com.picturesque.profile.payloads.PersonAddResponse;
 import com.picturesque.profile.repos.GroupMDRepository;
 import com.picturesque.profile.repos.GroupRepository;
@@ -69,5 +72,53 @@ public class GroupService {
 
     String message = "Group " + name + " added successfully!";
     return new Response<GroupAddResponse>(new GroupAddResponse(message), HttpStatus.OK);
+  }
+
+  public Response<GroupAddResponse> modifyGroup(GroupPutRequest req) {
+
+    // 1. Verify user inputs
+    // TODO add some kind of validation here such that only the actual user can modify their own details
+
+    Group modifiedGroup = groupRepository.findByGroupID(req.getGroupID());
+    if (modifiedGroup == null) {
+      throw new GroupIllegalArgument("Group does not exist in the database");
+    }
+    GroupMD modifiedGroupMD = groupMDRepository.findByGroupID(modifiedGroup.getGroupID());
+
+    // 2. Modify what can be modified
+    List<String> messages = new ArrayList<>();
+    String bio = req.getBio();
+    String groupName = req.getGroupName();
+    String picture = req.getPicture();
+
+    if (groupName != null) {
+        modifiedGroup.setName(groupName);
+        messages.add("Group name modified successfully");
+    }
+
+    if (bio != null) {
+      if (bio.length() > 200) {
+        messages.add("Bio Length is too long!");
+      } else {
+        modifiedGroup.setBio(bio);
+        messages.add("Bio added successfully!");
+      }
+    }
+
+    if (picture != null) {
+      // TODO probably check here
+        modifiedGroup.setPic(picture);
+        messages.add("Picture added successfully!");
+    }
+
+    if (messages.size() == 0) {
+      messages.add("Nothing was modified!");
+    }
+
+    groupRepository.save(modifiedGroup);
+    groupMDRepository.save(modifiedGroupMD);
+
+    return new Response<>(new GroupAddResponse(messages.toString()),
+            HttpStatus.OK);
   }
 }
