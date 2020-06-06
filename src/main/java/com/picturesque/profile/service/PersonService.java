@@ -5,9 +5,14 @@ import com.picturesque.profile.databaseModels.Person;
 import com.picturesque.profile.databaseModels.PersonMD;
 import com.picturesque.profile.exceptions.PersonIllegalArgument;
 import com.picturesque.profile.helperModels.UserID;
+import com.picturesque.profile.payloads.GETRequests.PersonGetRequest;
 import com.picturesque.profile.payloads.GenericResponse.Response;
 import com.picturesque.profile.payloads.PUTRequests.PersonPutRequest;
 import com.picturesque.profile.payloads.PersonAddResponse;
+import com.picturesque.profile.payloads.PersonGetResponse;
+import com.picturesque.profile.payloads.PersonGetResponseAllFields;
+import com.picturesque.profile.payloads.PersonGetResponseSomeFields;
+import com.picturesque.profile.repos.FollowRepository;
 import com.picturesque.profile.repos.PersonMDRepository;
 import com.picturesque.profile.repos.PersonRepository;
 import com.picturesque.profile.payloads.POSTRequests.PersonRequest;
@@ -17,6 +22,7 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.Years;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -29,11 +35,14 @@ public class PersonService {
 
   private PersonRepository personRepo;
   private PersonMDRepository personMDRepo;
+  private FollowRepository followRepo;
 
   @Autowired
-  public PersonService(PersonRepository personRepo, PersonMDRepository personMDRepo) {
+  public PersonService(PersonRepository personRepo, PersonMDRepository personMDRepo,
+                       FollowRepository followRepo) {
     this.personRepo = personRepo;
     this.personMDRepo = personMDRepo;
+    this.followRepo = followRepo;
   }
 
   public Response<PersonAddResponse> addPerson(PersonRequest req) {
@@ -164,5 +173,58 @@ public class PersonService {
     DateTime dt = new DateTime(date);
     DateTime today = new LocalDateTime().toDateTime();
     return Years.yearsBetween(dt, today).getYears() >= 13;
+  }
+
+  public Response<PersonGetResponse> getPersonInfo(PersonGetRequest req) {
+
+    //PersonGetResponse resp = new PersonGetResponseSomeFields("kartik", 12,
+            //12, "", "kartik");
+
+
+    // Thinking about what kinds of access could we need?
+
+    // This stuff might need to be changed depending on how session is implemented.
+
+    Person requester = personRepo.findByUserName(req.getRequester());
+    Person requested = personRepo.findByUserName(req.getRequester());
+
+    if(requester == null || requested == null) {
+      throw new PersonIllegalArgument("Either requester or requested person doesn't exist");
+    }
+
+    PersonMD requestedMD = personMDRepo.findByUserId(requested.getUserID());
+
+    PersonGetResponse response;
+    // 1. Person themselves, return all data
+    if(requester.getUserName().equals(requested.getUserName())) {
+      Integer followerCount = followRepo.countFollowByUserID(requested.getUserID());
+      Integer followingCount = followRepo.countFollowByUserID(requested.getUserID()); // TODO
+
+      response = new PersonGetResponseAllFields(requested.getUserName(), followerCount,
+              followingCount, requested.getPic(), requested.getName(), requested.getPoints(),
+              requested.getProfileType(), requested.getFollowerInvite(), requested.getGroupInvite(),
+              requestedMD.getDob(), requestedMD.getDateJoined(), requestedMD.getLastLogin(),
+              requestedMD.getLastIP(), requestedMD.getBio(), requestedMD.getGroupIds());
+
+    }
+    else {
+      response = new PersonGetResponseSomeFields("kartik", 10,
+             10, "", "kartik");
+    }
+
+    // 2. Follower looking at this profile - most info would be displayed, somethings like ip don't
+    //    need to be returned
+
+    // 3. Person who does follow this person - minimum info
+
+//
+//
+//    PersonGetResponse resp = new PersonGetResponseAllFields("kartik", 10,
+//            10, "", "kartik", 12,
+//            Person.PROFILE_PRIVACY.PUBLIC, new ArrayList<>(),
+//            new ArrayList<>(), "", new Date(), new Date(), new Date(),
+//            "", "", new ArrayList<>());
+
+    return new Response<>(response, HttpStatus.OK);
   }
 }
