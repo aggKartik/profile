@@ -18,7 +18,6 @@ public class PersonGetResponseAllFields extends PersonGetResponse{
   private Date dateJoined;
   private Date lastLogin;
   private String lastIP;
-  private String bio;
   private List<GroupID> groupIds;
 
   public PersonGetResponseAllFields(String userName, Integer numFollowers, Integer numFollowing,
@@ -27,7 +26,7 @@ public class PersonGetResponseAllFields extends PersonGetResponse{
                                     List<GroupID> groupInvite, Date dob,
                                     Date dateJoined, Date lastLogin, String lastIP, String bio,
                                     List<GroupID> groupIds) {
-    super(userName, numFollowers, numFollowing, picture, name);
+    super(userName, numFollowers, numFollowing, picture, name, bio);
     this.points = points;
     this.profileType = profileType;
     this.followerInvite = followerInvite;
@@ -37,7 +36,6 @@ public class PersonGetResponseAllFields extends PersonGetResponse{
     this.dateJoined = dateJoined;
     this.lastLogin = lastLogin;
     this.lastIP = lastIP;
-    this.bio = bio;
     this.groupIds = groupIds;
   }
 

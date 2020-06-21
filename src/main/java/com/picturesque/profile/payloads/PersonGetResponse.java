@@ -13,13 +13,16 @@ public abstract class PersonGetResponse {
   protected Integer numFollowing;
   protected String picture;
   protected String name;
+  protected String bio;
 
-  public PersonGetResponse(String userName, Integer numFollowers, Integer numFollowing, String picture, String name) {
+
+  public PersonGetResponse(String userName, Integer numFollowers, Integer numFollowing, String picture, String name, String bio) {
     this.userName = userName;
     this.numFollowers = numFollowers;
     this.numFollowing = numFollowing;
     this.picture = picture;
     this.name = name;
+    this.bio = bio;
   }
 
   public String getUserName() {

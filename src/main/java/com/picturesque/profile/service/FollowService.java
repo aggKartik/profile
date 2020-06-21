@@ -66,7 +66,7 @@ public class FollowService {
         // if it is a public profile
         else if (requested.getProfileType() == Person.PROFILE_PRIVACY.PUBLIC) {
             Date now = new Date();
-            Follow follow = new Follow(requested.getUserID(), requester.getUserID(), now);
+            Follow follow = new Follow(requester.getUserID(), requested.getUserID(), now);
             followRepository.save(follow);
         }
         // else catch any other errors can't find
