@@ -49,7 +49,7 @@ public class FollowService {
         // check if they're already in the other person's invite list????? IS this needed?
 
         // check if person already follows the person
-        if (followRepository.findByFollowingAndUserID(requester.getUserID(), requested.getUserID()) != null) {
+        if (followRepository.findByFollowingAndUserID(requested.getUserID(), requester.getUserID()) != null) {
             throw new FollowIllegalArgument("You already follow this person");
         }
 
@@ -62,19 +62,22 @@ public class FollowService {
             }
             requested.addFollowerInvite(requester.getUserID());
             personRepository.save(requested);
+            message = "You successfully requested to followed " +
+                    requested.getName();
         }
         // if it is a public profile
         else if (requested.getProfileType() == Person.PROFILE_PRIVACY.PUBLIC) {
             Date now = new Date();
-            Follow follow = new Follow(requested.getUserID(), requester.getUserID(), now);
+            Follow follow = new Follow(requester.getUserID(), requested.getUserID(), now);
             followRepository.save(follow);
+            message = "You followed " + requested.getName() + " successfully!";
         }
         // else catch any other errors can't find
         else {
             throw new FollowIllegalArgument("Some kind of error not handled");
         }
 
-        message = "You followed " + requested.getName() + " successfully!";
+
         return new Response<>(new FollowAddResponse(message), HttpStatus.OK);
     }
 

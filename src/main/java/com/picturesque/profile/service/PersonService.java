@@ -5,9 +5,12 @@ import com.picturesque.profile.databaseModels.Person;
 import com.picturesque.profile.databaseModels.PersonMD;
 import com.picturesque.profile.exceptions.PersonIllegalArgument;
 import com.picturesque.profile.helperModels.UserID;
+import com.picturesque.profile.payloads.GETRequests.PersonGetRequest;
 import com.picturesque.profile.payloads.GenericResponse.Response;
 import com.picturesque.profile.payloads.PUTRequests.PersonPutRequest;
 import com.picturesque.profile.payloads.PersonAddResponse;
+import com.picturesque.profile.payloads.PersonGetResponse;
+import com.picturesque.profile.repos.FollowRepository;
 import com.picturesque.profile.repos.PersonMDRepository;
 import com.picturesque.profile.repos.PersonRepository;
 import com.picturesque.profile.payloads.POSTRequests.PersonRequest;
@@ -29,11 +32,14 @@ public class PersonService {
 
   private PersonRepository personRepo;
   private PersonMDRepository personMDRepo;
+  private FollowRepository followRepo;
 
   @Autowired
-  public PersonService(PersonRepository personRepo, PersonMDRepository personMDRepo) {
+  public PersonService(PersonRepository personRepo, PersonMDRepository personMDRepo,
+                       FollowRepository followRepo) {
     this.personRepo = personRepo;
     this.personMDRepo = personMDRepo;
+    this.followRepo = followRepo;
   }
 
   public Response<PersonAddResponse> addPerson(PersonRequest req) {
@@ -164,5 +170,59 @@ public class PersonService {
     DateTime dt = new DateTime(date);
     DateTime today = new LocalDateTime().toDateTime();
     return Years.yearsBetween(dt, today).getYears() >= 13;
+  }
+
+  public Response<PersonGetResponse> getPersonInfo(PersonGetRequest req) {
+
+    // This stuff might need to be changed depending on how session is implemented.
+
+    Person requester = personRepo.findByUserName(req.getRequester());
+    Person requested = personRepo.findByUserName(req.getRequested());
+
+    if (requester == null || requested == null) {
+      throw new PersonIllegalArgument("Either requester or requested person doesn't exist");
+    }
+
+    PersonMD requestedMD = personMDRepo.findByUserId(requested.getUserID());
+    Integer followerCount = followRepo.countByFollowing(requested.getUserID());
+    Integer followingCount = followRepo.countFollowByUserID(requested.getUserID());
+
+    PersonGetResponse.Builder build = new PersonGetResponse.Builder(requested.getUserName(),
+            followerCount, followingCount, requested.getPic(),
+            requested.getName(), requestedMD.getBio());
+    PersonGetResponse response;
+
+    // 1. Person themselves, return all data
+    if (requester.getUserName().equals(requested.getUserName())) {
+      response = build
+              .withPoints(requested.getPoints())
+              .withPrivacy(requested.getProfileType())
+              .withFollowerInvite(requested.getFollowerInvite())
+              .withGroupInvite(requested.getGroupInvite())
+              .withLastIP(requestedMD.getLastIP())
+              .withLastLogin(requestedMD.getLastLogin())
+              .withListOfGroups(requestedMD.getGroupIds())
+              .withDateJoined(requestedMD.getDateJoined())
+              .build();
+    }
+    // 2. Follower looking at this profile - most info would be displayed, somethings like ip don't
+    //    need to be returned or its a public profile
+    else if (followRepo.findByFollowingAndUserID(requested.getUserID(), requester.getUserID()) != null
+            || requested.getProfileType() == Person.PROFILE_PRIVACY.PUBLIC) {
+      response = build
+              .withPoints(requested.getPoints())
+              .withListOfGroups(requestedMD.getGroupIds())
+              .withPrivacy(requested.getProfileType())
+              .build();
+    }
+    // 3. Person who doesn't follow this person - minimum info
+    else {
+      response = build
+              .withPrivacy(requested.getProfileType())
+              .withPoints(requested.getPoints())
+              .build();
+    }
+
+    return new Response<>(response, HttpStatus.OK);
   }
 }
