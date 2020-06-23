@@ -4,10 +4,13 @@ import com.picturesque.profile.databaseModels.Person;
 import com.picturesque.profile.databaseModels.PersonMD;
 import com.picturesque.profile.exceptions.PersonIllegalArgument;
 import com.picturesque.profile.helperModels.UserID;
+import com.picturesque.profile.payloads.GETRequests.PersonGetRequest;
 import com.picturesque.profile.payloads.GenericResponse.Response;
 import com.picturesque.profile.payloads.POSTRequests.PersonRequest;
 import com.picturesque.profile.payloads.PUTRequests.PersonPutRequest;
 import com.picturesque.profile.payloads.PersonAddResponse;
+import com.picturesque.profile.payloads.PersonGetResponse;
+import com.picturesque.profile.repos.FollowRepository;
 import com.picturesque.profile.repos.PersonMDRepository;
 import com.picturesque.profile.repos.PersonRepository;
 import com.picturesque.profile.service.PersonService;
@@ -40,6 +43,9 @@ public class PersonServiceTest {
 
   @Mock
   private PersonMDRepository personMDRepository;
+
+  @Mock
+  private FollowRepository followRepository;
 
   @InjectMocks
   private PersonService personService;
@@ -178,9 +184,40 @@ public class PersonServiceTest {
             null, null);
 
     given(personRepository.findByUserName(req.userName)).willReturn(null);
-
     assertThrows(PersonIllegalArgument.class, () -> personService.changePerson(putRequest),
             "Person does not exist in the database");
+  }
+
+  @Test
+  void getPersonInformationThemselves() {
+
+    PersonGetRequest request = new PersonGetRequest("JohnDoe", "JohnDoe");
+
+    PersonGetResponse expectedResponse = new PersonGetResponse.Builder(addedPerson.getUserName(),
+            1, 1, addedPerson.getPic(),
+            addedPerson.getName(), metaData.getBio())
+            .withPoints(addedPerson.getPoints())
+            .withPrivacy(addedPerson.getProfileType())
+            .withFollowerInvite(addedPerson.getFollowerInvite())
+            .withGroupInvite(addedPerson.getGroupInvite())
+            .withLastIP(metaData.getLastIP())
+            .withLastLogin(metaData.getLastLogin())
+            .withListOfGroups(metaData.getGroupIds())
+            .withDateJoined(metaData.getDateJoined())
+            .build();
+
+    // Mock out first if statement
+    given(personRepository.findByUserName(req.userName)).willReturn(addedPerson);
+    given(personRepository.findByUserName(req.userName)).willReturn(addedPerson);
+
+    given(personMDRepository.findByUserId(addedPerson.getUserID())).willReturn(metaData);
+
+    given(followRepository.countByFollowing(addedPerson.getUserID())).willReturn(1);
+    given(followRepository.countFollowByUserID(addedPerson.getUserID())).willReturn(1);
+
+    PersonGetResponse actualResponse = personService.getPersonInfo(request).getResponse();
+
+    assertThat(actualResponse, equalTo(expectedResponse));
 
   }
 

@@ -1,18 +1,15 @@
 package com.picturesque.profile.payloads;
-
-// At minimum: user_name, number of followers and following, picture, name
-
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.picturesque.profile.databaseModels.Person;
 import com.picturesque.profile.helperModels.GroupID;
 import com.picturesque.profile.helperModels.UserID;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
- * This abstract class allows for a Person's information to be queried and returned
- * in appropriate amounts depending on privilage.
+ * This class allows for a Person's information to be queried and returned
+ * in appropriate amounts by using the Builder Pattern.
  */
 public class PersonGetResponse {
 
@@ -265,5 +262,57 @@ public class PersonGetResponse {
 
   public void setGroupIds(List<GroupID> groupIds) {
     this.groupIds = groupIds;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    PersonGetResponse response = (PersonGetResponse) o;
+    return Objects.equals(userName, response.userName) &&
+            Objects.equals(numFollowers, response.numFollowers) &&
+            Objects.equals(numFollowing, response.numFollowing) &&
+            Objects.equals(picture, response.picture) &&
+            Objects.equals(name, response.name) &&
+            Objects.equals(bio, response.bio) &&
+            Objects.equals(points, response.points) &&
+            Objects.equals(listOfGroups, response.listOfGroups) &&
+            privacy == response.privacy &&
+            Objects.equals(followerInvite, response.followerInvite) &&
+            Objects.equals(groupInvite, response.groupInvite) &&
+            Objects.equals(dob, response.dob) &&
+            Objects.equals(dateJoined, response.dateJoined) &&
+            Objects.equals(lastLogin, response.lastLogin) &&
+            Objects.equals(lastIP, response.lastIP) &&
+            Objects.equals(groupIds, response.groupIds);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(userName, numFollowers, numFollowing, picture, name, bio, points,
+            listOfGroups, privacy, followerInvite, groupInvite, dob, dateJoined, lastLogin,
+            lastIP, groupIds);
+  }
+
+  @Override
+  public String toString() {
+    return "PersonGetResponse{" +
+            "userName='" + userName + '\'' +
+            ", numFollowers=" + numFollowers +
+            ", numFollowing=" + numFollowing +
+            ", picture='" + picture + '\'' +
+            ", name='" + name + '\'' +
+            ", bio='" + bio + '\'' +
+            ", points=" + points +
+            ", listOfGroups=" + listOfGroups +
+            ", privacy=" + privacy +
+            ", followerInvite=" + followerInvite +
+            ", groupInvite=" + groupInvite +
+            ", dob=" + dob +
+            ", dateJoined=" + dateJoined +
+            ", lastLogin=" + lastLogin +
+            ", lastIP='" + lastIP + '\'' +
+            ", groupIds=" + groupIds +
+            '}';
   }
 }

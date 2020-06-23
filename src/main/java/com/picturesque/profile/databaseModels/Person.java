@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 /*
@@ -159,4 +160,28 @@ public class Person {
             ", groupInvite=" + groupInvite +
             '}';
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Person person = (Person) o;
+    return points == person.points &&
+            Objects.equals(name, person.name) &&
+            Objects.equals(userName, person.userName) &&
+            Objects.equals(userID, person.userID) &&
+            Objects.equals(token, person.token) &&
+            Objects.equals(pass, person.pass) &&
+            Objects.equals(pic, person.pic) &&
+            profileType == person.profileType &&
+            Objects.equals(followerInvite, person.followerInvite) &&
+            Objects.equals(groupInvite, person.groupInvite);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, userName, userID, token, pass, points, pic, profileType,
+            followerInvite, groupInvite);
+  }
+
 }
