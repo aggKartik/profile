@@ -10,9 +10,9 @@ import com.picturesque.profile.payloads.GenericResponse.Response;
 import com.picturesque.profile.payloads.PUTRequests.PersonPutRequest;
 import com.picturesque.profile.payloads.PersonAddResponse;
 import com.picturesque.profile.payloads.PersonGetResponse;
-import com.picturesque.profile.payloads.PersonGetResponseAllFields;
-import com.picturesque.profile.payloads.PersonGetResponseMinimumFields;
-import com.picturesque.profile.payloads.PersonResponseFollowerOrPublicFields;
+//import com.picturesque.profile.payloads.PersonGetResponseAllFields;
+//import com.picturesque.profile.payloads.PersonGetResponseMinimumFields;
+//import com.picturesque.profile.payloads.PersonResponseFollowerOrPublicFields;
 import com.picturesque.profile.repos.FollowRepository;
 import com.picturesque.profile.repos.PersonMDRepository;
 import com.picturesque.profile.repos.PersonRepository;
@@ -182,7 +182,7 @@ public class PersonService {
     Person requester = personRepo.findByUserName(req.getRequester());
     Person requested = personRepo.findByUserName(req.getRequested());
 
-    if(requester == null || requested == null) {
+    if (requester == null || requested == null) {
       throw new PersonIllegalArgument("Either requester or requested person doesn't exist");
     }
 
@@ -190,35 +190,40 @@ public class PersonService {
     Integer followerCount = followRepo.countByFollowing(requested.getUserID());
     Integer followingCount = followRepo.countFollowByUserID(requested.getUserID());
 
+    PersonGetResponse.Builder build = new PersonGetResponse.Builder(requested.getUserName(),
+            followerCount, followingCount, requested.getPic(),
+            requested.getName(), requestedMD.getBio());
     PersonGetResponse response;
-    System.out.println(requested.getProfileType());
+
     // 1. Person themselves, return all data
-    if(requester.getUserName().equals(requested.getUserName())) {
-
-      response = new PersonGetResponseAllFields(requested.getUserName(), followerCount,
-              followingCount, requested.getPic(), requested.getName(), requested.getPoints(),
-              requested.getProfileType(), requested.getFollowerInvite(), requested.getGroupInvite(),
-              requestedMD.getDob(), requestedMD.getDateJoined(), requestedMD.getLastLogin(),
-              requestedMD.getLastIP(), requestedMD.getBio(), requestedMD.getGroupIds());
-
+    if (requester.getUserName().equals(requested.getUserName())) {
+      response = build
+              .withPoints(requested.getPoints())
+              .withPrivacy(requested.getProfileType())
+              .withFollowerInvite(requested.getFollowerInvite())
+              .withGroupInvite(requested.getGroupInvite())
+              .withLastIP(requestedMD.getLastIP())
+              .withLastLogin(requestedMD.getLastLogin())
+              .withListOfGroups(requestedMD.getGroupIds())
+              .withDateJoined(requestedMD.getDateJoined())
+              .build();
     }
     // 2. Follower looking at this profile - most info would be displayed, somethings like ip don't
     //    need to be returned or its a public profile
-    else if(followRepo.findByFollowingAndUserID(requested.getUserID(), requester.getUserID()) != null
+    else if (followRepo.findByFollowingAndUserID(requested.getUserID(), requester.getUserID()) != null
             || requested.getProfileType() == Person.PROFILE_PRIVACY.PUBLIC) {
-
-      System.out.println("BLAHHHHHHHHH");
-      response = new PersonResponseFollowerOrPublicFields(requested.getUserName(), followerCount,
-              followingCount, requested.getPic(), requested.getName(), requestedMD.getGroupIds(),
-              requestedMD.getBio(), requested.getPoints(),
-              requested.getProfileType());
+      response = build
+              .withPoints(requested.getPoints())
+              .withListOfGroups(requestedMD.getGroupIds())
+              .withPrivacy(requested.getProfileType())
+              .build();
     }
     // 3. Person who doesn't follow this person - minimum info
     else {
-      System.out.println("ALSO");
-      response = new PersonGetResponseMinimumFields(requested.getUserName(), followerCount,
-              followingCount, requested.getPic(), requested.getName(), requested.getProfileType(),
-              requestedMD.getBio());
+      response = build
+              .withPrivacy(requested.getProfileType())
+              .withPoints(requested.getPoints())
+              .build();
     }
 
     return new Response<>(response, HttpStatus.OK);

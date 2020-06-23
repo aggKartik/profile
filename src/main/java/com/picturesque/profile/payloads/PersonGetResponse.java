@@ -2,27 +2,141 @@ package com.picturesque.profile.payloads;
 
 // At minimum: user_name, number of followers and following, picture, name
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.picturesque.profile.databaseModels.Person;
+import com.picturesque.profile.helperModels.GroupID;
+import com.picturesque.profile.helperModels.UserID;
+
+import java.util.Date;
+import java.util.List;
+
 /**
  * This abstract class allows for a Person's information to be queried and returned
  * in appropriate amounts depending on privilage.
  */
-public abstract class PersonGetResponse {
+public class PersonGetResponse {
 
-  protected String userName;
-  protected Integer numFollowers;
-  protected Integer numFollowing;
-  protected String picture;
-  protected String name;
-  protected String bio;
+  private String userName;
+  private Integer numFollowers;
+  private Integer numFollowing;
+  private String picture;
+  private String name;
+  private String bio;
+  private Integer points;
+  private List<GroupID> listOfGroups;
+  private Person.PROFILE_PRIVACY privacy;
+  private List<UserID> followerInvite;
+  private List<GroupID> groupInvite;
+  private Date dob;
+  private Date dateJoined;
+  private Date lastLogin;
+  private String lastIP;
+  private List<GroupID> groupIds;
 
+  private PersonGetResponse() {}
 
-  public PersonGetResponse(String userName, Integer numFollowers, Integer numFollowing, String picture, String name, String bio) {
-    this.userName = userName;
-    this.numFollowers = numFollowers;
-    this.numFollowing = numFollowing;
-    this.picture = picture;
-    this.name = name;
-    this.bio = bio;
+  public static class Builder {
+
+    private String userName;
+    private Integer numFollowers;
+    private Integer numFollowing;
+    private String picture;
+    private String name;
+    private String bio;
+    private Integer points;
+    private List<GroupID> listOfGroups;
+    private Person.PROFILE_PRIVACY privacy;
+
+    private List<UserID> followerInvite;
+    private List<GroupID> groupInvite;
+    private Date dob;
+    private Date dateJoined;
+    private Date lastLogin;
+    private String lastIP;
+
+    /**
+     * At minimum include the following fields for a get response.
+     * @param userName
+     * @param numFollowers
+     * @param numFollowing
+     * @param picture
+     * @param name
+     * @param bio
+     */
+    public Builder(String userName, Integer numFollowers, Integer numFollowing, String picture,
+                   String name, String bio) {
+      this.userName = userName;
+      this.numFollowers = numFollowers;
+      this.numFollowing = numFollowing;
+      this.picture = picture;
+      this.name = name;
+      this.bio = bio;
+    }
+
+    public PersonGetResponse build(){
+      PersonGetResponse response = new PersonGetResponse();
+      response.userName = this.userName;
+      response.name = this.name;
+      response.numFollowers = this.numFollowers;
+      response.numFollowing = this.numFollowing;
+      response.bio = this.bio;
+      response.picture = this.picture;
+      response.points = this.points;
+      response.listOfGroups = this.listOfGroups;
+      response.privacy = this.privacy;
+      response.followerInvite = this.followerInvite;
+      response.groupInvite = this.groupInvite;
+      response.dob = this.dob;
+      response.dateJoined = this.dateJoined;
+      response.lastLogin = this.lastLogin;
+      response.lastIP = this.lastIP;
+      return response;
+    }
+
+    public Builder withFollowerInvite(List<UserID> followerInvite) {
+      this.followerInvite = followerInvite;
+      return this;
+    }
+
+    public Builder withGroupInvite(List<GroupID> groupInvite) {
+      this.groupInvite = groupInvite;
+      return this;
+    }
+
+    public Builder withDob(Date dob) {
+      this.dob = dob;
+      return this;
+    }
+
+    public Builder withDateJoined(Date dateJoined) {
+      this.dateJoined = dateJoined;
+      return this;
+    }
+
+    public Builder withLastLogin(Date lastLogin) {
+      this.lastLogin = lastLogin;
+      return this;
+    }
+
+    public Builder withLastIP(String lastIP) {
+      this.lastIP = lastIP;
+      return this;
+    }
+
+    public Builder withPoints(Integer points) {
+      this.points = points;
+      return this;
+    }
+
+    public Builder withListOfGroups(List<GroupID> logs){
+      this.listOfGroups = logs;
+      return this;
+    }
+
+    public Builder withPrivacy(Person.PROFILE_PRIVACY privacy) {
+      this.privacy = privacy;
+      return this;
+    }
   }
 
   public String getUserName() {
@@ -63,5 +177,93 @@ public abstract class PersonGetResponse {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getBio() {
+    return bio;
+  }
+
+  public void setBio(String bio) {
+    this.bio = bio;
+  }
+
+  public Integer getPoints() {
+    return points;
+  }
+
+  public void setPoints(Integer points) {
+    this.points = points;
+  }
+
+  public List<GroupID> getListOfGroups() {
+    return listOfGroups;
+  }
+
+  public void setListOfGroups(List<GroupID> listOfGroups) {
+    this.listOfGroups = listOfGroups;
+  }
+
+  public Person.PROFILE_PRIVACY getPrivacy() {
+    return privacy;
+  }
+
+  public void setPrivacy(Person.PROFILE_PRIVACY privacy) {
+    this.privacy = privacy;
+  }
+
+  public List<UserID> getFollowerInvite() {
+    return followerInvite;
+  }
+
+  public void setFollowerInvite(List<UserID> followerInvite) {
+    this.followerInvite = followerInvite;
+  }
+
+  public List<GroupID> getGroupInvite() {
+    return groupInvite;
+  }
+
+  public void setGroupInvite(List<GroupID> groupInvite) {
+    this.groupInvite = groupInvite;
+  }
+
+  public Date getDob() {
+    return dob;
+  }
+
+  public void setDob(Date dob) {
+    this.dob = dob;
+  }
+
+  public Date getDateJoined() {
+    return dateJoined;
+  }
+
+  public void setDateJoined(Date dateJoined) {
+    this.dateJoined = dateJoined;
+  }
+
+  public Date getLastLogin() {
+    return lastLogin;
+  }
+
+  public void setLastLogin(Date lastLogin) {
+    this.lastLogin = lastLogin;
+  }
+
+  public String getLastIP() {
+    return lastIP;
+  }
+
+  public void setLastIP(String lastIP) {
+    this.lastIP = lastIP;
+  }
+
+  public List<GroupID> getGroupIds() {
+    return groupIds;
+  }
+
+  public void setGroupIds(List<GroupID> groupIds) {
+    this.groupIds = groupIds;
   }
 }
