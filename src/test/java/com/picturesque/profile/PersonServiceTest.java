@@ -15,12 +15,6 @@ import com.picturesque.profile.repos.PersonMDRepository;
 import com.picturesque.profile.repos.PersonRepository;
 import com.picturesque.profile.service.PersonService;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,26 +23,27 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.Date;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+
 @ExtendWith(MockitoExtension.class)
 public class PersonServiceTest {
 
-  @Mock
-  private PersonRepository personRepository;
+  @Mock private PersonRepository personRepository;
 
-  @Mock
-  private PersonMDRepository personMDRepository;
+  @Mock private PersonMDRepository personMDRepository;
 
-  @Mock
-  private FollowRepository followRepository;
+  @Mock private FollowRepository followRepository;
 
-  @InjectMocks
-  private PersonService personService;
+  @InjectMocks private PersonService personService;
 
   private PersonRequest req;
   private Person addedPerson;
@@ -56,18 +51,32 @@ public class PersonServiceTest {
 
   @BeforeEach
   void setupTest() {
-    req = new PersonRequest("John", "JohnDoe", "123456",
-            "password", new Date(946688400));
+    req = new PersonRequest("John", "JohnDoe", "123456", "password", new Date(946688400));
 
-    addedPerson = new Person("John", "JohnDoe", new UserID("-2019924783"),
-            "123456", "password", 0, "", Person.PROFILE_PRIVACY.PUBLIC,
-            new ArrayList<>(), new ArrayList<>());
+    addedPerson =
+        new Person(
+            "John",
+            "JohnDoe",
+            new UserID("-2019924783"),
+            "123456",
+            "password",
+            0,
+            "",
+            Person.PROFILE_PRIVACY.PUBLIC,
+            new ArrayList<>(),
+            new ArrayList<>());
 
     DateTime today = new LocalDateTime().toDateTime();
-    metaData = new PersonMD(addedPerson.getUserID(), req.getDob(), today.toDate(),
-            today.toDate(), req.getClientIp(), "", new ArrayList<>());
+    metaData =
+        new PersonMD(
+            addedPerson.getUserID(),
+            req.getDob(),
+            today.toDate(),
+            today.toDate(),
+            req.getClientIp(),
+            "",
+            new ArrayList<>());
   }
-
 
   @Test
   void testAddUser() {
@@ -79,9 +88,7 @@ public class PersonServiceTest {
     Response<PersonAddResponse> resp = personService.addPerson(req);
 
     assertThat(resp.getStatusCode(), equalTo(HttpStatus.OK));
-    assertThat(resp.getResponse().getMessage(),
-            equalTo("User JohnDoe added successfully!"));
-
+    assertThat(resp.getResponse().getMessage(), equalTo("User JohnDoe added successfully!"));
   }
 
   @Test
@@ -102,24 +109,29 @@ public class PersonServiceTest {
     req.setUserName("     ---JohnDoe---");
     given(personRepository.findByUserName(req.userName)).willReturn(null);
 
-    assertThrows(PersonIllegalArgument.class, () -> personService.addPerson(req),
-            "Illegal username specified");
+    assertThrows(
+        PersonIllegalArgument.class,
+        () -> personService.addPerson(req),
+        "Illegal username specified");
     req.setUserName("JohnDoe");
-    req.setName("                                                                          " +
-            "                                                                              ");
-    assertThrows(PersonIllegalArgument.class, () -> personService.addPerson(req),
-            "Illegal name specified");
+    req.setName(
+        "                                                                          "
+            + "                                                                              ");
+    assertThrows(
+        PersonIllegalArgument.class, () -> personService.addPerson(req), "Illegal name specified");
 
     given(personRepository.findByUserName(req.userName)).willReturn(addedPerson);
-    assertThrows(PersonIllegalArgument.class, () -> personService.addPerson(req),
-            "User with this name already exists!");
+    assertThrows(
+        PersonIllegalArgument.class,
+        () -> personService.addPerson(req),
+        "User with this name already exists!");
   }
 
   @Test
   void changePersonTest() {
 
-    PersonPutRequest putRequest = new PersonPutRequest("JohnDoe", "Life's Good",
-            "xyz.jpg", new Date(946688400));
+    PersonPutRequest putRequest =
+        new PersonPutRequest("JohnDoe", "Life's Good", "xyz.jpg", new Date(946688400));
 
     given(personRepository.findByUserName(req.userName)).willReturn(addedPerson);
     given(personMDRepository.findByUserId(addedPerson.getUserID())).willReturn(metaData);
@@ -127,15 +139,14 @@ public class PersonServiceTest {
     Response<PersonAddResponse> resp = personService.changePerson(putRequest);
 
     assertThat(resp.getStatusCode(), equalTo(HttpStatus.OK));
-    assertThat(resp.getResponse().getMessage(),
-            equalTo("[DOB modified successfully, Bio added successfully!]"));
-
+    assertThat(
+        resp.getResponse().getMessage(),
+        equalTo("[DOB modified successfully, Bio added successfully!]"));
   }
 
   @Test
   void changeJustBioTest() {
-    PersonPutRequest putRequest = new PersonPutRequest("JohnDoe", "Life's Good",
-            null, null);
+    PersonPutRequest putRequest = new PersonPutRequest("JohnDoe", "Life's Good", null, null);
 
     given(personRepository.findByUserName(req.userName)).willReturn(addedPerson);
     given(personMDRepository.findByUserId(addedPerson.getUserID())).willReturn(metaData);
@@ -143,14 +154,12 @@ public class PersonServiceTest {
     Response<PersonAddResponse> resp = personService.changePerson(putRequest);
 
     assertThat(resp.getStatusCode(), equalTo(HttpStatus.OK));
-    assertThat(resp.getResponse().getMessage(),
-            equalTo("[Bio added successfully!]"));
+    assertThat(resp.getResponse().getMessage(), equalTo("[Bio added successfully!]"));
   }
 
   @Test
   void changeJustDobTest() {
-    PersonPutRequest putRequest = new PersonPutRequest("JohnDoe", null,
-            null, new Date(946688400));
+    PersonPutRequest putRequest = new PersonPutRequest("JohnDoe", null, null, new Date(946688400));
 
     given(personRepository.findByUserName(req.userName)).willReturn(addedPerson);
     given(personMDRepository.findByUserId(addedPerson.getUserID())).willReturn(metaData);
@@ -158,14 +167,12 @@ public class PersonServiceTest {
     Response<PersonAddResponse> resp = personService.changePerson(putRequest);
 
     assertThat(resp.getStatusCode(), equalTo(HttpStatus.OK));
-    assertThat(resp.getResponse().getMessage(),
-            equalTo("[DOB modified successfully]"));
+    assertThat(resp.getResponse().getMessage(), equalTo("[DOB modified successfully]"));
   }
 
   @Test
   void changeNothingTest() {
-    PersonPutRequest putRequest = new PersonPutRequest("JohnDoe", null,
-            null, null);
+    PersonPutRequest putRequest = new PersonPutRequest("JohnDoe", null, null, null);
 
     given(personRepository.findByUserName(req.userName)).willReturn(addedPerson);
     given(personMDRepository.findByUserId(addedPerson.getUserID())).willReturn(metaData);
@@ -173,19 +180,19 @@ public class PersonServiceTest {
     Response<PersonAddResponse> resp = personService.changePerson(putRequest);
 
     assertThat(resp.getStatusCode(), equalTo(HttpStatus.OK));
-    assertThat(resp.getResponse().getMessage(),
-            equalTo("[Nothing was modified!]"));
+    assertThat(resp.getResponse().getMessage(), equalTo("[Nothing was modified!]"));
   }
 
   @Test
   void changePersonNotInDBTest() {
 
-    PersonPutRequest putRequest = new PersonPutRequest("JohnDoe", null,
-            null, null);
+    PersonPutRequest putRequest = new PersonPutRequest("JohnDoe", null, null, null);
 
     given(personRepository.findByUserName(req.userName)).willReturn(null);
-    assertThrows(PersonIllegalArgument.class, () -> personService.changePerson(putRequest),
-            "Person does not exist in the database");
+    assertThrows(
+        PersonIllegalArgument.class,
+        () -> personService.changePerson(putRequest),
+        "Person does not exist in the database");
   }
 
   @Test
@@ -193,9 +200,14 @@ public class PersonServiceTest {
 
     PersonGetRequest request = new PersonGetRequest("JohnDoe", "JohnDoe");
 
-    PersonGetResponse expectedResponse = new PersonGetResponse.Builder(addedPerson.getUserName(),
-            1, 1, addedPerson.getPic(),
-            addedPerson.getName(), metaData.getBio())
+    PersonGetResponse expectedResponse =
+        new PersonGetResponse.Builder(
+                addedPerson.getUserName(),
+                1,
+                1,
+                addedPerson.getPic(),
+                addedPerson.getName(),
+                metaData.getBio())
             .withPoints(addedPerson.getPoints())
             .withPrivacy(addedPerson.getProfileType())
             .withFollowerInvite(addedPerson.getFollowerInvite())
@@ -218,8 +230,5 @@ public class PersonServiceTest {
     PersonGetResponse actualResponse = personService.getPersonInfo(request).getResponse();
 
     assertThat(actualResponse, equalTo(expectedResponse));
-
   }
-
 }
-
