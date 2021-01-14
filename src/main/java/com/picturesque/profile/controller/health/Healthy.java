@@ -2,27 +2,27 @@ package com.picturesque.profile.controller.health;
 
 public class Healthy {
 
-    private int statusCode;
-    private String message;
+  private int statusCode;
+  private String message;
 
-    public int getStatusCode() {
-        return statusCode;
-    }
+  public Healthy(int statusCode, String message) {
+    this.statusCode = statusCode;
+    this.message = message;
+  }
 
-    public void setStatusCode(int statusCode) {
-        this.statusCode = statusCode;
-    }
+  public int getStatusCode() {
+    return statusCode;
+  }
 
-    public String getMessage() {
-        return message;
-    }
+  public void setStatusCode(int statusCode) {
+    this.statusCode = statusCode;
+  }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+  public String getMessage() {
+    return message;
+  }
 
-    public Healthy(int statusCode, String message) {
-        this.statusCode = statusCode;
-        this.message = message;
-    }
+  public void setMessage(String message) {
+    this.message = message;
+  }
 }

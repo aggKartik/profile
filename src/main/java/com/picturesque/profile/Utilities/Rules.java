@@ -6,7 +6,6 @@ import java.util.function.Function;
 
 public class Rules {
 
-
   private static List<Function<String, Boolean>> listOfRules() {
     List<Function<String, Boolean>> rules = new ArrayList<>();
     rules.add(str -> str.matches(".*\\s.*"));
@@ -19,7 +18,7 @@ public class Rules {
   }
 
   public static boolean containsWhiteSpace(String str) {
-    //return str.contains(" ");
+    // return str.contains(" ");
     return str.matches(".*\\s.*");
   }
 
@@ -27,9 +26,5 @@ public class Rules {
     return str.length() < 2;
   }
 
-  /**
-   * TODO:
-   * add more rules here as needed
-   */
-
+  /** TODO: add more rules here as needed */
 }

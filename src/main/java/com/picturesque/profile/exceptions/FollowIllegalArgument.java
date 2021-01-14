@@ -1,14 +1,11 @@
 package com.picturesque.profile.exceptions;
 
-public class FollowIllegalArgument extends RuntimeException{
-    public FollowIllegalArgument() {
-        super("Illegal Argument Specified!");
-    }
+public class FollowIllegalArgument extends RuntimeException {
+  public FollowIllegalArgument() {
+    super("Illegal Argument Specified!");
+  }
 
-    public FollowIllegalArgument(String message) {
-        super(message);
-    }
+  public FollowIllegalArgument(String message) {
+    super(message);
+  }
 }
-
-
-

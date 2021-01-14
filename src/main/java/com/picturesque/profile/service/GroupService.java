@@ -3,16 +3,13 @@ package com.picturesque.profile.service;
 import com.picturesque.profile.databaseModels.Group;
 import com.picturesque.profile.databaseModels.GroupMD;
 import com.picturesque.profile.databaseModels.Person;
-import com.picturesque.profile.databaseModels.PersonMD;
 import com.picturesque.profile.exceptions.GroupIllegalArgument;
-import com.picturesque.profile.exceptions.PersonIllegalArgument;
 import com.picturesque.profile.helperModels.GroupID;
 import com.picturesque.profile.helperModels.UserID;
 import com.picturesque.profile.payloads.GenericResponse.Response;
 import com.picturesque.profile.payloads.GroupAddResponse;
 import com.picturesque.profile.payloads.POSTRequests.GroupRequest;
 import com.picturesque.profile.payloads.PUTRequests.GroupPutRequest;
-import com.picturesque.profile.payloads.PersonAddResponse;
 import com.picturesque.profile.repos.GroupMDRepository;
 import com.picturesque.profile.repos.GroupRepository;
 import com.picturesque.profile.repos.PersonRepository;
@@ -20,7 +17,6 @@ import com.picturesque.profile.repos.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,7 +31,8 @@ public class GroupService {
   private GroupMDRepository groupMDRepository;
 
   @Autowired
-  public GroupService(GroupRepository groupRepo, PersonRepository personRepo, GroupMDRepository groupMDRepo) {
+  public GroupService(
+      GroupRepository groupRepo, PersonRepository personRepo, GroupMDRepository groupMDRepo) {
     this.groupRepository = groupRepo;
     this.personRepository = personRepo;
     this.groupMDRepository = groupMDRepo;
@@ -65,8 +62,8 @@ public class GroupService {
       groupRepository.save(group);
       groupMDRepository.save(new GroupMD(groupID, now));
     } catch (DataAccessException e) {
-      Response<GroupAddResponse> resp = new Response<>(new GroupAddResponse(e.getMessage()),
-              HttpStatus.BAD_REQUEST);
+      Response<GroupAddResponse> resp =
+          new Response<>(new GroupAddResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
       return resp;
     }
 
@@ -77,7 +74,8 @@ public class GroupService {
   public Response<GroupAddResponse> modifyGroup(GroupPutRequest req) {
 
     // 1. Verify user inputs
-    // TODO add some kind of validation here such that only the actual user can modify their own details
+    // TODO add some kind of validation here such that only the actual user can modify their own
+    // details
 
     Group modifiedGroup = groupRepository.findByGroupID(req.getGroupID());
     if (modifiedGroup == null) {
@@ -92,8 +90,8 @@ public class GroupService {
     String picture = req.getPicture();
 
     if (groupName != null) {
-        modifiedGroup.setName(groupName);
-        messages.add("Group name modified successfully");
+      modifiedGroup.setName(groupName);
+      messages.add("Group name modified successfully");
     }
 
     if (bio != null) {
@@ -107,8 +105,8 @@ public class GroupService {
 
     if (picture != null) {
       // TODO probably check here
-        modifiedGroup.setPic(picture);
-        messages.add("Picture added successfully!");
+      modifiedGroup.setPic(picture);
+      messages.add("Picture added successfully!");
     }
 
     if (messages.size() == 0) {
@@ -118,7 +116,6 @@ public class GroupService {
     groupRepository.save(modifiedGroup);
     groupMDRepository.save(modifiedGroupMD);
 
-    return new Response<>(new GroupAddResponse(messages.toString()),
-            HttpStatus.OK);
+    return new Response<>(new GroupAddResponse(messages.toString()), HttpStatus.OK);
   }
 }

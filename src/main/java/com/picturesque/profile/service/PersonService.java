@@ -7,13 +7,13 @@ import com.picturesque.profile.exceptions.PersonIllegalArgument;
 import com.picturesque.profile.helperModels.UserID;
 import com.picturesque.profile.payloads.GETRequests.PersonGetRequest;
 import com.picturesque.profile.payloads.GenericResponse.Response;
+import com.picturesque.profile.payloads.POSTRequests.PersonRequest;
 import com.picturesque.profile.payloads.PUTRequests.PersonPutRequest;
 import com.picturesque.profile.payloads.PersonAddResponse;
 import com.picturesque.profile.payloads.PersonGetResponse;
 import com.picturesque.profile.repos.FollowRepository;
 import com.picturesque.profile.repos.PersonMDRepository;
 import com.picturesque.profile.repos.PersonRepository;
-import com.picturesque.profile.payloads.POSTRequests.PersonRequest;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
@@ -35,8 +35,8 @@ public class PersonService {
   private FollowRepository followRepo;
 
   @Autowired
-  public PersonService(PersonRepository personRepo, PersonMDRepository personMDRepo,
-                       FollowRepository followRepo) {
+  public PersonService(
+      PersonRepository personRepo, PersonMDRepository personMDRepo, FollowRepository followRepo) {
     this.personRepo = personRepo;
     this.personMDRepo = personMDRepo;
     this.followRepo = followRepo;
@@ -78,15 +78,16 @@ public class PersonService {
 
     // 4. Process a successful return message
     message = "User " + req.getUserName() + " added successfully!";
-    Response<PersonAddResponse> resp = new Response<>(new PersonAddResponse(message), HttpStatus.OK);
+    Response<PersonAddResponse> resp =
+        new Response<>(new PersonAddResponse(message), HttpStatus.OK);
     return resp;
   }
-
 
   public Response<PersonAddResponse> changePerson(PersonPutRequest req) {
 
     // 1. Verify user inputs
-    // TODO add some kind of validation here such that only the actual user can modify their own details
+    // TODO add some kind of validation here such that only the actual user can modify their own
+    // details
 
     Person modifiedPerson = personRepo.findByUserName(req.getUserName());
     if (modifiedPerson == null) {
@@ -124,27 +125,34 @@ public class PersonService {
     personRepo.save(modifiedPerson);
     personMDRepo.save(modifiedPersonMD);
 
-    return new Response<>(new PersonAddResponse(messages.toString()),
-            HttpStatus.OK);
+    return new Response<>(new PersonAddResponse(messages.toString()), HttpStatus.OK);
   }
 
   private Person getPerson(PersonRequest req, long nowVal) {
     String userId = Integer.toString(Objects.hash(req.getName(), req.getUserName(), nowVal));
-    return new Person(req.getName(),
-            req.getUserName(),
-            new UserID(userId),
-            req.getToken(),
-            req.getPass(),
-            0, "",
-            Person.PROFILE_PRIVACY.PUBLIC,
-            new ArrayList<>(),
-            new ArrayList<>());
+    return new Person(
+        req.getName(),
+        req.getUserName(),
+        new UserID(userId),
+        req.getToken(),
+        req.getPass(),
+        0,
+        "",
+        Person.PROFILE_PRIVACY.PUBLIC,
+        new ArrayList<>(),
+        new ArrayList<>());
   }
 
   private PersonMD createPersonMD(PersonRequest req, Person person) {
     DateTime today = new LocalDateTime().toDateTime();
-    return new PersonMD(person.getUserID(), req.getDob(),
-            today.toDate(), today.toDate(), req.getClientIp(), "", new ArrayList<>());
+    return new PersonMD(
+        person.getUserID(),
+        req.getDob(),
+        today.toDate(),
+        today.toDate(),
+        req.getClientIp(),
+        "",
+        new ArrayList<>());
   }
 
   private boolean nameValid(String name) {
@@ -187,14 +195,20 @@ public class PersonService {
     Integer followerCount = followRepo.countByFollowing(requested.getUserID());
     Integer followingCount = followRepo.countFollowByUserID(requested.getUserID());
 
-    PersonGetResponse.Builder build = new PersonGetResponse.Builder(requested.getUserName(),
-            followerCount, followingCount, requested.getPic(),
-            requested.getName(), requestedMD.getBio());
+    PersonGetResponse.Builder build =
+        new PersonGetResponse.Builder(
+            requested.getUserName(),
+            followerCount,
+            followingCount,
+            requested.getPic(),
+            requested.getName(),
+            requestedMD.getBio());
     PersonGetResponse response;
 
     // 1. Person themselves, return all data
     if (requester.getUserName().equals(requested.getUserName())) {
-      response = build
+      response =
+          build
               .withPoints(requested.getPoints())
               .withPrivacy(requested.getProfileType())
               .withFollowerInvite(requested.getFollowerInvite())
@@ -207,9 +221,11 @@ public class PersonService {
     }
     // 2. Follower looking at this profile - most info would be displayed, somethings like ip don't
     //    need to be returned or its a public profile
-    else if (followRepo.findByFollowingAndUserID(requested.getUserID(), requester.getUserID()) != null
-            || requested.getProfileType() == Person.PROFILE_PRIVACY.PUBLIC) {
-      response = build
+    else if (followRepo.findByFollowingAndUserID(requested.getUserID(), requester.getUserID())
+            != null
+        || requested.getProfileType() == Person.PROFILE_PRIVACY.PUBLIC) {
+      response =
+          build
               .withPoints(requested.getPoints())
               .withListOfGroups(requestedMD.getGroupIds())
               .withPrivacy(requested.getProfileType())
@@ -217,10 +233,8 @@ public class PersonService {
     }
     // 3. Person who doesn't follow this person - minimum info
     else {
-      response = build
-              .withPrivacy(requested.getProfileType())
-              .withPoints(requested.getPoints())
-              .build();
+      response =
+          build.withPrivacy(requested.getProfileType()).withPoints(requested.getPoints()).build();
     }
 
     return new Response<>(response, HttpStatus.OK);

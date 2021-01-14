@@ -16,22 +16,21 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
   @Override
-  protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-                                                                HttpHeaders headers,
-                                                                HttpStatus status,
-                                                                WebRequest request) {
+  protected ResponseEntity<Object> handleHttpMessageNotReadable(
+      HttpMessageNotReadableException ex,
+      HttpHeaders headers,
+      HttpStatus status,
+      WebRequest request) {
     String error = "Malformed JSON request";
     return buildResponseEntity(new CustomApiError(HttpStatus.BAD_REQUEST, error, ex));
   }
 
-
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
-          MethodArgumentNotValidException ex,
-          HttpHeaders headers,
-          HttpStatus status,
-          WebRequest request) {
-
+      MethodArgumentNotValidException ex,
+      HttpHeaders headers,
+      HttpStatus status,
+      WebRequest request) {
 
     CustomApiError apiError = new CustomApiError(HttpStatus.BAD_REQUEST);
     apiError.setMessage("Validation error");
@@ -44,5 +43,4 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
   private ResponseEntity<Object> buildResponseEntity(CustomApiError apiError) {
     return new ResponseEntity<>(apiError, apiError.getStatus());
   }
-
 }

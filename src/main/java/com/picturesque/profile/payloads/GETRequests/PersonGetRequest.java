@@ -5,12 +5,11 @@ import javax.validation.constraints.NotNull;
 
 public class PersonGetRequest {
 
-  @NotNull @NotEmpty
-  private String requester;
-  @NotNull @NotEmpty
-  private String requested;
+  @NotNull @NotEmpty private String requester;
+  @NotNull @NotEmpty private String requested;
 
-  public PersonGetRequest(@NotNull @NotEmpty String requester, @NotNull @NotEmpty String requested) {
+  public PersonGetRequest(
+      @NotNull @NotEmpty String requester, @NotNull @NotEmpty String requested) {
     this.requester = requester;
     this.requested = requested;
   }
