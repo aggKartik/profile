@@ -18,8 +18,10 @@ import java.util.List;
 public class CustomApiError {
 
   private HttpStatus status;
+
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
   private LocalDateTime timestamp;
+
   private String message;
   private String debugMessage;
   private List<SubError> subErrors;
@@ -45,6 +47,10 @@ public class CustomApiError {
     this.status = status;
     this.message = message;
     this.debugMessage = ex.getLocalizedMessage();
+  }
+
+  public static ResponseEntity<Object> buildResponseEntity(CustomApiError apiError) {
+    return new ResponseEntity<>(apiError, apiError.getStatus());
   }
 
   public HttpStatus getStatus() {
@@ -100,9 +106,7 @@ public class CustomApiError {
   }
 
   private void addValidationError(ObjectError objectError) {
-    this.addValidationError(
-            objectError.getObjectName(),
-            objectError.getDefaultMessage());
+    this.addValidationError(objectError.getObjectName(), objectError.getDefaultMessage());
   }
 
   private void addSubError(SubError subError) {
@@ -112,20 +116,16 @@ public class CustomApiError {
     subErrors.add(subError);
   }
 
-  private void addValidationError(String object, String field, Object rejectedValue, String message) {
+  private void addValidationError(
+      String object, String field, Object rejectedValue, String message) {
     addSubError(new ValidationError(object, message, field, rejectedValue));
   }
 
   private void addValidationError(FieldError fieldError) {
     this.addValidationError(
-            fieldError.getObjectName(),
-            fieldError.getField(),
-            fieldError.getRejectedValue(),
-            fieldError.getDefaultMessage());
+        fieldError.getObjectName(),
+        fieldError.getField(),
+        fieldError.getRejectedValue(),
+        fieldError.getDefaultMessage());
   }
-
-  public static ResponseEntity<Object> buildResponseEntity(CustomApiError apiError) {
-    return new ResponseEntity<>(apiError, apiError.getStatus());
-  }
-
 }

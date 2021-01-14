@@ -7,8 +7,7 @@ import javax.validation.constraints.NotNull;
 
 public class PersonPutRequest {
 
-  @NotNull @NotEmpty
-  private String userName;
+  @NotNull @NotEmpty private String userName;
   private String bio;
   private String picture;
   private Date dob;
@@ -54,11 +53,18 @@ public class PersonPutRequest {
 
   @Override
   public String toString() {
-    return "PersonPutRequest{" +
-            "userName='" + userName + '\'' +
-            ", bio='" + bio + '\'' +
-            ", picture='" + picture + '\'' +
-            ", dob=" + dob +
-            '}';
+    return "PersonPutRequest{"
+        + "userName='"
+        + userName
+        + '\''
+        + ", bio='"
+        + bio
+        + '\''
+        + ", picture='"
+        + picture
+        + '\''
+        + ", dob="
+        + dob
+        + '}';
   }
 }

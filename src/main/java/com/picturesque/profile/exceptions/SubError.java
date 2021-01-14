@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-abstract class SubError {
-}
+abstract class SubError {}
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -27,5 +26,4 @@ class ValidationError extends SubError {
     this.rejectedValue = rejectedValue;
     this.field = field;
   }
-
 }

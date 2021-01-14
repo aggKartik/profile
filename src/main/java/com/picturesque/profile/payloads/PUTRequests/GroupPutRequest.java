@@ -2,19 +2,14 @@ package com.picturesque.profile.payloads.PUTRequests;
 
 import com.picturesque.profile.helperModels.GroupID;
 
-import java.util.Date;
-
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 public class GroupPutRequest {
 
-  @NotNull
-  private GroupID groupID ;
+  @NotNull private GroupID groupID;
   private String groupName;
   private String bio;
   private String picture;
-
 
   public GroupPutRequest(@NotNull GroupID groupID, String groupName, String bio, String picture) {
     this.groupID = groupID;
@@ -57,11 +52,18 @@ public class GroupPutRequest {
 
   @Override
   public String toString() {
-    return "GroupPutRequest{" +
-            "groupID=" + groupID +
-            ", groupName='" + groupName + '\'' +
-            ", bio='" + bio + '\'' +
-            ", picture='" + picture + '\'' +
-            '}';
+    return "GroupPutRequest{"
+        + "groupID="
+        + groupID
+        + ", groupName='"
+        + groupName
+        + '\''
+        + ", bio='"
+        + bio
+        + '\''
+        + ", picture='"
+        + picture
+        + '\''
+        + '}';
   }
 }

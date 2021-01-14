@@ -14,23 +14,19 @@ import javax.validation.constraints.NotNull;
 @Scope("request")
 public class PersonRequest {
 
-  @NotNull
-  @NotEmpty
-  public String name;
-  @NotNull
-  @NotEmpty
-  public String userName;
-  public String token; //probably need a seperate token class?
-  @NotNull
-  @NotEmpty
-  public String pass;
-  @NotNull
-  public Date dob;
-  @Autowired
-  HttpServletRequest request;
+  @NotNull @NotEmpty public String name;
+  @NotNull @NotEmpty public String userName;
+  public String token; // probably need a seperate token class?
+  @NotNull @NotEmpty public String pass;
+  @NotNull public Date dob;
+  @Autowired HttpServletRequest request;
 
-  public PersonRequest(@NotNull @NotEmpty String name, @NotNull @NotEmpty String userName,
-                       String token, @NotNull @NotEmpty String pass, @NotNull Date dob) {
+  public PersonRequest(
+      @NotNull @NotEmpty String name,
+      @NotNull @NotEmpty String userName,
+      String token,
+      @NotNull @NotEmpty String pass,
+      @NotNull Date dob) {
     this.name = name;
     this.userName = userName;
     this.token = token;
